@@ -1,11 +1,17 @@
-import './App.css';
+import React from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router';
+import Callback from './component/Callback';
+import SpotifyAuth from './component/SpotifyAuth';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <>
-      <h2 className="text-amber-950 text-7xl">Welcome to Moodify</h2>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<SpotifyAuth />} />
+        <Route path="/callback" element={<Callback />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
