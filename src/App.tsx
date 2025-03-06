@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import Callback from './component/Callback';
+import Header from './component/Header';
 import Home from './component/Home';
-import NavBar from './component/NavBar';
 import { fetchProfile, initiateLogin } from './services/auth-service';
 import { UserProfile } from './types/spotify';
 
@@ -37,8 +37,8 @@ const App = () => {
     }
   }, []);
   return (
-    <>
-      <NavBar
+    <div className="max-h-screen flex flex-col justify-between bg-secondary-dark">
+      <Header
         onLogOut={handleLogout}
         accessToken={accessToken}
         profile={profile}
@@ -50,7 +50,7 @@ const App = () => {
         {/* <Route path="/home" element={<Home />} /> */}
         <Route path="/" element={<Home />} />
       </Routes>
-    </>
+    </div>
   );
 };
 

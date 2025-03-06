@@ -9,7 +9,7 @@
   /* Secondary Color Palette */
   --color-secondary: var(--color-neutral-950);
   --color-secondary-hover: var(--color-neutral-800);
-  --color-secondary-border: var(--color-neutral-800);
+  --color-secondary-border: var(--color-neutral-600);
   --color-secondary-text-light: var(--color-neutral-400);
   --color-secondary-text-dim: var(--color-neutral-800);
   --color-secondary-text-dark: var(--color-neutral-950);

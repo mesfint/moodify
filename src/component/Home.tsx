@@ -1,7 +1,7 @@
 const Home = () => {
   return (
     <div>
-      <h2>Welcom to Moodify---now you are logged in</h2>
+      <h2>Welcom to Moodify</h2>
     </div>
   );
 };
