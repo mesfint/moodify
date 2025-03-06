@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import Callback from './component/Callback';
+import Home from './component/Home';
 import NavBar from './component/NavBar';
-import { fetchProfile } from './services/auth-service';
+import { fetchProfile, initiateLogin } from './services/auth-service';
 import { UserProfile } from './types/spotify';
 
-const App: React.FC = () => {
+const App = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(
     localStorage.getItem('access_token')
@@ -41,10 +42,13 @@ const App: React.FC = () => {
         onLogOut={handleLogout}
         accessToken={accessToken}
         profile={profile}
+        onLogin={initiateLogin}
       />
 
       <Routes>
         <Route path="/callback" element={<Callback />} />
+        {/* <Route path="/home" element={<Home />} /> */}
+        <Route path="/" element={<Home />} />
       </Routes>
     </>
   );

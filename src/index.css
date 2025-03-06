@@ -1,1 +1,57 @@
 @import 'tailwindcss';
+
+@theme {
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 976px;
+  --font-display: 'Inter', 'Raleway', 'sans-serif';
+  --breakpoint-3xl: 120rem;
+  /* Secondary Color Palette */
+  --color-secondary: var(--color-neutral-950);
+  --color-secondary-hover: var(--color-neutral-800);
+  --color-secondary-border: var(--color-neutral-800);
+  --color-secondary-text-light: var(--color-neutral-400);
+  --color-secondary-text-dim: var(--color-neutral-800);
+  --color-secondary-text-dark: var(--color-neutral-950);
+  --color-secondary-dark: #1e1e1e;
+  --color-secondary-dark-hover: var(--color-neutral-900);
+  /* ... */
+}
+/* @plugin "blahblah" */
+/* @import "tailwindcss" prefix(tw);*/
+/* In ur class => <h3 className="tw-text-yellow-500"></h3> */
+/* these these are additional themes, means they dont 
+replace the existing themes, but if you want to replace 
+the existing once, do like this
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 976px;
+}
+  If you want to replace existing color in tw
+  eg. --color-orange-500: #ffa500
+*/
+/* source: https://www.youtube.com/watch?v=bupetqS1SMU */
+/* note that names are changed in v4: https://tailwindcss.com/docs/theme#theme-variable-namespaces */
+
+/* Style scroll bar */
+* {
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  @apply bg-transparent w-2;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply bg-secondary-dark rounded-full;
+}
+
+.scrollbar-hidden::-webkit-scrollbar-thumb {
+  @apply bg-transparent;
+}
+
+.scrollbar-hidden:hover::-webkit-scrollbar-thumb {
+  @apply bg-secondary-border;
+}

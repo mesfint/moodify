@@ -31,7 +31,7 @@ const Callback: React.FC = () => {
     const payload = {
       grant_type: 'authorization_code',
       code,
-      redirect_uri: 'http://localhost:5174/callback', // Match your redirect URI
+      redirect_uri: 'http://localhost:5173/callback', // Match your redirect URI
       client_id: '744fccda3a6d417184998410733cb884', // Replace with your Spotify Client ID
       code_verifier: codeVerifier,
     };
