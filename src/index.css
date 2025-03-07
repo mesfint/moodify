@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
 
 @theme {
   --breakpoint-sm: 480px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 976px;
-  --font-display: 'Inter', 'Raleway', 'sans-serif';
+  --font-display: 'Raleway', sans-serif;
+  --font-sans: 'Inter', sans-serif;
   --breakpoint-3xl: 120rem;
   /* Secondary Color Palette */
   --color-secondary: var(--color-neutral-950);
@@ -13,7 +15,7 @@
   --color-secondary-text-light: var(--color-neutral-400);
   --color-secondary-text-dim: var(--color-neutral-800);
   --color-secondary-text-dark: var(--color-neutral-950);
-  --color-secondary-dark: #1e1e1e;
+  --color-secondary-dark: var(--color-neutral-950);
   --color-secondary-dark-hover: var(--color-neutral-900);
   /* ... */
 }
@@ -36,7 +38,7 @@ the existing once, do like this
 /* note that names are changed in v4: https://tailwindcss.com/docs/theme#theme-variable-namespaces */
 
 /* Style scroll bar */
-* {
+/* * {
   scrollbar-width: thin;
 }
 
@@ -54,4 +56,4 @@ the existing once, do like this
 
 .scrollbar-hidden:hover::-webkit-scrollbar-thumb {
   @apply bg-secondary-border;
-}
+} */

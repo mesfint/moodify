@@ -21,3 +21,25 @@ export interface Image {
   height: number;
   width: number;
 }
+
+export interface CategoryItem {
+  href: string;
+  id: string;
+  name: string;
+  icons: {
+    url: string;
+    height: number | null;
+    width: number | null;
+  }[];
+}
+
+export interface MusicCategories {
+  categories: {
+    href: string;
+    limit: number;
+    next: string | null;
+    offset: number;
+    previous: string | null;
+    items: CategoryItem[];
+  };
+}

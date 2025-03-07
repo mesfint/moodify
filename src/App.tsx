@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import Callback from './component/Callback';
+import Categories from './component/Categories';
 import Header from './component/Header';
-import Home from './component/Home';
+import Sidebar from './component/Sidebar';
 import { fetchProfile, initiateLogin } from './services/auth-service';
 import { UserProfile } from './types/spotify';
 
@@ -13,10 +14,10 @@ const App = () => {
   );
   // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem('access_token'); // Clear the access token
-    localStorage.removeItem('code_verifier'); // Clear the code verifier
-    setAccessToken(null); // Reset the access token state
-    setProfile(null); // Reset the profile state
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('code_verifier');
+    setAccessToken(null);
+    setProfile(null);
   };
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -37,18 +38,22 @@ const App = () => {
     }
   }, []);
   return (
-    <div className="max-h-screen flex flex-col justify-between bg-secondary-dark">
-      <Header
-        onLogOut={handleLogout}
-        accessToken={accessToken}
-        profile={profile}
-        onLogin={initiateLogin}
-      />
+    <div className="min-h-screen flex bg-secondary-dark text-secondary-text-light">
+      <Sidebar />
+      <div className="flex-1 flex flex-col gap-4">
+        <Header
+          onLogOut={handleLogout}
+          accessToken={accessToken}
+          profile={profile}
+          onLogin={initiateLogin}
+        />
+        <Categories />
+      </div>
 
       <Routes>
         <Route path="/callback" element={<Callback />} />
         {/* <Route path="/home" element={<Home />} /> */}
-        <Route path="/" element={<Home />} />
+        {/* <Route path="/" element={<Home />} /> */}
       </Routes>
     </div>
   );
