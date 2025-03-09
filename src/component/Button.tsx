@@ -9,7 +9,7 @@ export const buttonStyles = cva(
   {
     variants: {
       variant: {
-        default: ['bg-secondary', 'hover:bg-secondary-hover'],
+        default: ['bg-neutral-800', 'hover:bg-secondary-hover'],
         ghost: ['hover:bg-gray-100'],
         dark: [
           'bg-secondary-dark',

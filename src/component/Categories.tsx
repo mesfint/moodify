@@ -1,53 +1,12 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { CategoryItem, MusicCategories } from '../types/spotify';
+import { CategoryItem } from '../types/spotify';
 import { Button } from './Button';
 
-const Categories = () => {
-  const [categories, setCategories] = useState<CategoryItem[]>([]);
-  const accessToken = localStorage.getItem('access_token');
+interface CategoriesProps {
+  categories: CategoryItem[];
+  //onCategorySelect: (id: string) => void;
+}
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      if (!accessToken) {
-        console.error('No access token found');
-        return;
-      }
-
-      try {
-        const response = await axios.get<MusicCategories>(
-          'https://api.spotify.com/v1/browse/categories',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-            params: {
-              limit: 20,
-              offset: 0,
-            },
-          }
-        );
-
-        const categoriesData = response.data.categories.items;
-        setCategories(categoriesData);
-        console.log('Fetched categories:', categoriesData);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.error('Error fetching categories:', {
-            message: error.message,
-            status: error.response?.status,
-            data: error.response?.data,
-          });
-        } else {
-          console.error('Unexpected error:', error);
-        }
-      }
-    };
-
-    fetchCategories();
-  }, [accessToken]);
-
-  // Fallback static categories
+const Categories = ({ categories }: CategoriesProps) => {
   const staticCategories = [
     'For You',
     'Relax',
@@ -66,7 +25,16 @@ const Categories = () => {
         (category, index) => (
           <Button
             variant="ghost"
-            key={index}
+            key={typeof category === 'string' ? index : category.id}
+            onClick={() => {
+              if (typeof category !== 'string') {
+                console.log('Clicked category:', {
+                  id: category.id,
+                  name: category.name,
+                });
+                //onCategorySelect(category.id);
+              }
+            }}
             className="px-4 py-2 bg-secondary-text-dim text-secondary-text-light rounded-full shadow-md"
           >
             {typeof category === 'string' ? category : category.name}

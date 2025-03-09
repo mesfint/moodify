@@ -47,7 +47,7 @@ const Header = ({
             onClick={onLogin}
             className="bg-secondary-text-dim border border-secondary-border rounded-full px-4 py-2 text-sm text-secondary-text-light hover:bg-secondary-dark-hover"
           >
-            Login
+            Login with Spotify
           </Button>
         ) : (
           <div className="relative flex items-center">

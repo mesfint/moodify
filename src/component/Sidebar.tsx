@@ -3,7 +3,7 @@ import { NavLink } from 'react-router'; // Fixed import
 import { Button } from './Button';
 
 const Sidebar = () => (
-  <aside className="flex flex-col h-full w-64 py-1 gap-6 bg-secondary-dark text-secondary-text-light">
+  <aside className=" flex-col-1  h-full w-64 py-1 gap-6 bg-secondary-dark text-secondary-text-light">
     <div className="flex-shrink-0 flex items-center gap-2 py-4 mx-4 bg-gradient-to-b from-secondary-text-dim via-secondary-dark to-secondary-dark p-3 rounded-lg shadow-md">
       <h3 className="text-white font-display font-bold text-lg">Moodify</h3>
       <div className="flex flex-row-reverse items-center gap-1">

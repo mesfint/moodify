@@ -1,18 +1,8 @@
 export interface UserProfile {
-  country: string;
   display_name: string;
   email: string;
-  explicit_content: {
-    filter_enabled: boolean;
-    filter_locked: boolean;
-  };
-  external_urls: { spotify: string };
-  followers: { href: string; total: number };
-  href: string;
   id: string;
-  images: Image[];
-  product: string;
-  type: string;
+  images: { url: string }[];
   uri: string;
 }
 
@@ -42,4 +32,64 @@ export interface MusicCategories {
     previous: string | null;
     items: CategoryItem[];
   };
+}
+//
+export interface PlaylistItem {
+  id: string;
+  name: string;
+  href: string;
+  description: string;
+  release_date: Date;
+  images: { url: string; height: number | null; width: number | null }[];
+}
+
+export interface PlaylistsResponse {
+  playlists: {
+    href: string;
+    items: PlaylistItem[];
+    limit: number;
+    next: string | null;
+    offset: number;
+    previous: string | null;
+    total: number;
+  };
+}
+
+export interface AlbumItem {
+  id: string;
+  name: string;
+  href: string;
+  release_date: string; // e.g., "2025-03-01"
+  artists: { id: string; name: string }[];
+  images: { url: string; height: number | null; width: number | null }[];
+  album_type: string; // e.g., "album", "single", "compilation"
+}
+
+export interface NewReleasesResponse {
+  albums: {
+    href: string;
+    items: AlbumItem[];
+    limit: number;
+    next: string | null;
+    offset: number;
+    previous: string | null;
+    total: number;
+  };
+}
+
+export interface TrackItem {
+  id: string;
+  name: string;
+  artists: { id: string; name: string }[];
+  preview_url: string | null;
+  duration_ms: number;
+  album: { images: { url: string }[] };
+}
+export interface SongItem {
+  id: string;
+  title: string;
+  artist: string;
+  mood: string;
+  thumbnailUrl: string;
+  audioUrl: string;
 }
