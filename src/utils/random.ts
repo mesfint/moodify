@@ -1,9 +1,9 @@
-import { AlbumItem } from '../types/spotify';
+import { SongItem } from '../types/moodify';
 
-export const getRandomAlbum = (
-  albums: AlbumItem[],
+export const getRandomSongs = (
+  songData: SongItem[],
   count: number
-): AlbumItem[] => {
-  const shuffeled = [...albums].sort(() => 0.5 - Math.random());
+): SongItem[] => {
+  const shuffeled = [...songData].sort(() => 0.5 - Math.random());
   return shuffeled.slice(0, count);
 };

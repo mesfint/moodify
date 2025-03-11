@@ -24,7 +24,7 @@ const Sidebar = () => (
         <Button variant="ghost" size="icon">
           <Library />
         </Button>
-        Your Library
+        Your Favourites
       </NavLink>
     </nav>
   </aside>

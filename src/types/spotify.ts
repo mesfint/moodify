@@ -85,11 +85,3 @@ export interface TrackItem {
   duration_ms: number;
   album: { images: { url: string }[] };
 }
-export interface SongItem {
-  id: string;
-  title: string;
-  artist: string;
-  mood: string;
-  thumbnailUrl: string;
-  audioUrl: string;
-}
