@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router';
+import { Route, Routes } from 'react-router-dom';
 import Callback from './component/Callback';
 import Favourite from './component/Favourite';
-import Header from './component/Header';
-import MoodCategories from './component/MoodCategories';
-import NewRelases from './component/NewRelases';
-import Sidebar from './component/Sidebar';
 import { Moods, songData } from './data/songs';
+import Home from './pages/Home';
+import Layout from './pages/Layout';
 import { fetchProfile, initiateLogin } from './services/auth-service';
 import { Categories, SongItem } from './types/moodify';
 import { UserProfile } from './types/spotify';
@@ -19,6 +17,8 @@ const App = () => {
 
   const [selectedMood, setSelectedMood] = useState<Categories>('All');
   const [thumbnailSongs, setThumbnailSongs] = useState<SongItem[]>([]);
+  const [favourites, setFavourites] = useState<SongItem[]>(songData);
+
   // const [activeTrack, setActiveTrack] = useState<TrackItem | null>(null);
   // const [isPlaying, setIsPlaying] = useState(false);
   // const [currentTime, setCurrentTime] = useState(0);
@@ -29,6 +29,11 @@ const App = () => {
   // const audioRef = useRef<HTMLAudioElement>(null);
   // console.log('songData', songData.slice(0, 5));
 
+  //Add favourite
+  const handleAddFavourite = (song: SongItem) => {
+    const newFav = !favourites.some((fav) => fav.id === song.id); //no dupilicate
+    if (newFav) setFavourites([...favourites, song]);
+  };
   // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('access_token');
@@ -64,29 +69,29 @@ const App = () => {
   }, [selectedMood, songs]);
 
   return (
-    <div className="min-h-screen flex bg-secondary-dark text-secondary-text-light">
-      <Sidebar />
-      <div className="flex-1 flex flex-col gap-4">
-        <Header
-          onLogOut={handleLogout}
-          accessToken={accessToken}
-          profile={profile}
-          onLogin={initiateLogin}
-        />
-        <MoodCategories
-          moods={moods}
-          onMoodSelect={setSelectedMood}
-          //onCategorySelect={handleSelectedCategory}
-        />
-        <NewRelases songs={thumbnailSongs} />
-      </div>
-
-      <Routes>
-        <Route path="/callback" element={<Callback />} />
-        <Route path="/favourite" element={<Favourite />} />
-        {/* <Route path="/" element={<Home />} /> */}
-      </Routes>
-    </div>
+    <>
+      <Layout
+        onLogOut={handleLogout}
+        accessToken={accessToken}
+        profile={profile}
+        onLogin={initiateLogin}
+      >
+        <Routes>
+          <Route
+            index
+            element={
+              <Home
+                moods={moods}
+                onMoodSelect={setSelectedMood}
+                songs={thumbnailSongs}
+              />
+            }
+          />
+          <Route path="/favourite" element={<Favourite />} />
+          <Route path="/callback" element={<Callback />} />
+        </Routes>
+      </Layout>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ import {
   VolumeOff,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SongItem } from '../types/moodify';
 import { Button } from './Button';
 
@@ -23,6 +24,7 @@ const NewReleases = ({ songs }: SongsProps) => {
   const [volume, setVolume] = useState(1);
 
   const audioRef = useRef<HTMLAudioElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (audioRef.current && songs[currentIndex]?.audioUrl) {
@@ -125,8 +127,13 @@ const NewReleases = ({ songs }: SongsProps) => {
     }
   };
 
+  const handleFavourite = () => {
+    navigate('/favourite');
+  };
+
   return (
     <div className="flex flex-col md:gap-4 mx-6">
+      {/* main slide */}
       <div className="flex">
         {selectedMusic ? (
           <div className="flex w-full">
@@ -150,6 +157,7 @@ const NewReleases = ({ songs }: SongsProps) => {
         )}
       </div>
       <div className="flex justify-between flex-shrink-0 bg-gradient-to-b from-secondary-text-dim via-secondary-dark to-secondary-dark w-full p-3 rounded-lg shadow-md">
+        {/* Controllers */}
         <div className="flex">
           <img
             className="w-8 h-8 rounded-md mr-2"
@@ -182,8 +190,8 @@ const NewReleases = ({ songs }: SongsProps) => {
               <VolumeOff onClick={handleVolume} />
             )}
           </Button>
-          <Button variant="default" size="icon" onClick={handlePlayPause}>
-            <Heart />
+          <Button variant="default" size="icon">
+            <Heart onClick={handleFavourite} />
           </Button>
           <Button variant="default" size="icon">
             <EllipsisVertical />

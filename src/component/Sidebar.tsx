@@ -1,5 +1,5 @@
-import { Circle, Home, Library } from 'lucide-react';
-import { NavLink } from 'react-router'; // Fixed import
+import { Circle, Heart, Home } from 'lucide-react';
+import { NavLink } from 'react-router-dom'; // Fixed import
 import { Button } from './Button';
 
 const Sidebar = () => (
@@ -20,9 +20,9 @@ const Sidebar = () => (
         </Button>
         Home
       </NavLink>
-      <NavLink to="/library" end className="flex items-center gap-2 py-1">
+      <NavLink to="/favourite" end className="flex items-center gap-2 py-1">
         <Button variant="ghost" size="icon">
-          <Library />
+          <Heart />
         </Button>
         Your Favourites
       </NavLink>
