@@ -17,7 +17,10 @@ const App = () => {
 
   const [selectedMood, setSelectedMood] = useState<Categories>('All');
   const [thumbnailSongs, setThumbnailSongs] = useState<SongItem[]>([]);
-  const [favourites, setFavourites] = useState<SongItem[]>(songData);
+  const [favourites, setFavourites] = useState<SongItem[]>(() => {
+    const storedFavs = localStorage.getItem('favSongs'); //first get key
+    return storedFavs ? JSON.parse(storedFavs) : []; //then update
+  });
 
   // const [activeTrack, setActiveTrack] = useState<TrackItem | null>(null);
   // const [isPlaying, setIsPlaying] = useState(false);
@@ -31,8 +34,17 @@ const App = () => {
 
   //Add favourite
   const handleAddFavourite = (song: SongItem) => {
-    const newFav = !favourites.some((fav) => fav.id === song.id); //no dupilicate
-    if (newFav) setFavourites([...favourites, song]);
+    //no-duplicate
+    if (!favourites.some((fav) => fav.id === song.id)) {
+      const updatedFavourites = [song, ...favourites];
+      setFavourites(updatedFavourites);
+      localStorage.setItem('favSongs', JSON.stringify(updatedFavourites)); // Save full array
+    }
+  };
+  const handleDeletefav = (id: number) => {
+    const remainingFavs = favourites.filter((fav) => fav.id !== id);
+    setFavourites(remainingFavs);
+    localStorage.setItem('favSongs', JSON.stringify(remainingFavs)); // Update storage
   };
   // Handle logout
   const handleLogout = () => {
@@ -84,10 +96,19 @@ const App = () => {
                 moods={moods}
                 onMoodSelect={setSelectedMood}
                 songs={thumbnailSongs}
+                onAddFavourite={handleAddFavourite}
               />
             }
           />
-          <Route path="/favourite" element={<Favourite />} />
+          <Route
+            path="/favourite"
+            element={
+              <Favourite
+                favourites={favourites}
+                onRemoveFavourite={handleDeletefav}
+              />
+            }
+          />
           <Route path="/callback" element={<Callback />} />
         </Routes>
       </Layout>

@@ -6,13 +6,14 @@ interface HomeProps {
   moods: Categories[];
   onMoodSelect: (mood: Categories) => void;
   songs: SongItem[];
+  onAddFavourite: (song: SongItem) => void;
 }
 
-const Home = ({ moods, onMoodSelect, songs }: HomeProps) => {
+const Home = ({ moods, onMoodSelect, songs, onAddFavourite }: HomeProps) => {
   return (
     <div className=" bg-secondary-dark">
       <MoodCategories moods={moods} onMoodSelect={onMoodSelect} />
-      <NewReleases songs={songs} />
+      <NewReleases songs={songs} onAddFavourite={onAddFavourite} />
     </div>
   );
 };

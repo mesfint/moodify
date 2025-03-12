@@ -9,22 +9,21 @@ import {
   VolumeOff,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { SongItem } from '../types/moodify';
 import { Button } from './Button';
 
 interface SongsProps {
   songs: SongItem[];
+  onAddFavourite: (song: SongItem) => void;
 }
 
-const NewReleases = ({ songs }: SongsProps) => {
+const NewReleases = ({ songs, onAddFavourite }: SongsProps) => {
   const [selectedMusic, setSelectedMusic] = useState<SongItem | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [volume, setVolume] = useState(1);
 
   const audioRef = useRef<HTMLAudioElement>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (audioRef.current && songs[currentIndex]?.audioUrl) {
@@ -127,10 +126,6 @@ const NewReleases = ({ songs }: SongsProps) => {
     }
   };
 
-  const handleFavourite = () => {
-    navigate('/favourite');
-  };
-
   return (
     <div className="flex flex-col md:gap-4 mx-6">
       {/* main slide */}
@@ -190,8 +185,13 @@ const NewReleases = ({ songs }: SongsProps) => {
               <VolumeOff onClick={handleVolume} />
             )}
           </Button>
-          <Button variant="default" size="icon">
-            <Heart onClick={handleFavourite} />
+          <Button
+            variant="default"
+            size="icon"
+            onClick={() => onAddFavourite(selectedMusic!)} //aserts not null
+            disabled={!selectedMusic} // Disable if null
+          >
+            <Heart />
           </Button>
           <Button variant="default" size="icon">
             <EllipsisVertical />
