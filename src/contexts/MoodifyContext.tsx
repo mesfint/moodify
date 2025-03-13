@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Moods, songData } from '../data/songs';
 import { fetchProfile, initiateLogin } from '../services/auth-service';
 import { Categories, SongItem } from '../types/moodify';
@@ -73,6 +74,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState(1);
   const audioRef = useRef<HTMLAudioElement>(new Audio());
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -96,14 +98,15 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         ? getRandomSongs(songs, 4)
         : songs.filter((song) => song.mood === selectedMood).slice(0, 4);
     setThumbnailSongs(filteredSongs);
+
     if (filteredSongs.length > 0 && !currentSong) {
       setCurrentSong(filteredSongs[0]);
+      if (audioRef.current) {
+        audioRef.current.src = filteredSongs[0].audioUrl; //Preload audio
+        audioRef.current.volume = volume;
+      }
     }
-    if (audioRef.current) {
-      audioRef.current.src = filteredSongs[0].audioUrl; //Preload audio
-      audioRef.current.volume = volume;
-    }
-  }, [selectedMood, songs, currentSong]);
+  }, [selectedMood, songs]);
 
   const addToFavorites = (song: SongItem) => {
     if (!favourites.some((fav) => fav.id === song.id)) {
@@ -173,6 +176,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     localStorage.removeItem('code_verifier');
     setAccessToken(null);
     setProfile(null);
+    navigate('/');
   };
 
   const login = () => {
