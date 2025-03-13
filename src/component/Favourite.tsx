@@ -1,9 +1,30 @@
-import { Play, Trash2 } from 'lucide-react';
+import { Pause, Play, Trash2 } from 'lucide-react';
 import { useMoodify } from '../hooks/useMoodify';
+import { SongItem } from '../types/moodify';
 import { Button } from './Button';
 
 const Favourite = () => {
-  const { favourites, removeFromFavorites } = useMoodify();
+  const {
+    favourites,
+    removeFromFavorites,
+    isPlaying,
+    playSong,
+    pauseSong,
+    currentSong,
+  } = useMoodify();
+
+  const handleTogglePlay = (song: SongItem) => {
+    if (currentSong?.id === song.id) {
+      if (isPlaying) {
+        pauseSong();
+      } else {
+        playSong(song);
+      }
+    } else {
+      // New song clicked—play it
+      playSong(song);
+    }
+  };
   return (
     <>
       <table className="table-auto w-full text-left gap-2 ">
@@ -20,7 +41,14 @@ const Favourite = () => {
         <tbody>
           {favourites.length > 0 ? (
             favourites.map((fav) => (
-              <tr key={fav.id}>
+              <tr
+                key={fav.id}
+                className={
+                  currentSong?.id === fav.id && isPlaying
+                    ? 'bg-secondary-text-dim'
+                    : 'bg-none'
+                }
+              >
                 <td>
                   <img
                     className="w-8 h-8 rounded-md mr-2"
@@ -30,8 +58,16 @@ const Favourite = () => {
                 <td>{fav.artist}</td>
                 <td>{fav.title}</td>
                 <td>
-                  <Button variant="default" size="icon">
-                    <Play />
+                  <Button
+                    variant="default"
+                    size="icon"
+                    onClick={() => handleTogglePlay(fav)}
+                  >
+                    {currentSong?.id === fav.id && isPlaying ? (
+                      <Pause />
+                    ) : (
+                      <Play />
+                    )}
                   </Button>
                 </td>
                 <td>
