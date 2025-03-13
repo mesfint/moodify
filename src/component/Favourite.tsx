@@ -1,13 +1,9 @@
 import { Play, Trash2 } from 'lucide-react';
-import { SongItem } from '../types/moodify';
+import { useMoodify } from '../hooks/useMoodify';
 import { Button } from './Button';
 
-interface FavouriteProps {
-  favourites: SongItem[];
-  onRemoveFavourite: (id: number) => void;
-}
-
-const Favourite = ({ favourites, onRemoveFavourite }: FavouriteProps) => {
+const Favourite = () => {
+  const { favourites, removeFromFavorites } = useMoodify();
   return (
     <>
       <table className="table-auto w-full text-left gap-2 ">
@@ -42,7 +38,7 @@ const Favourite = ({ favourites, onRemoveFavourite }: FavouriteProps) => {
                   <Button variant="default" size="icon">
                     <Trash2
                       className="text-red-600 cursor-pointer"
-                      onClick={() => onRemoveFavourite(fav.id)}
+                      onClick={() => removeFromFavorites(fav.id)}
                     />
                   </Button>
                 </td>

@@ -1,19 +1,15 @@
 import MoodCategories from '../component/MoodCategories';
 import NewReleases from '../component/NewRelases';
-import { Categories, SongItem } from '../types/moodify'; // Adjust path as needed
+import { useMoodify } from '../hooks/useMoodify';
 
-interface HomeProps {
-  moods: Categories[];
-  onMoodSelect: (mood: Categories) => void;
-  songs: SongItem[];
-  onAddFavourite: (song: SongItem) => void;
-}
+const Home = () => {
+  const { moods, setSelectedMood, thumbnailSongs, addToFavorites } =
+    useMoodify();
 
-const Home = ({ moods, onMoodSelect, songs, onAddFavourite }: HomeProps) => {
   return (
-    <div className=" bg-secondary-dark">
-      <MoodCategories moods={moods} onMoodSelect={onMoodSelect} />
-      <NewReleases songs={songs} onAddFavourite={onAddFavourite} />
+    <div className="bg-secondary-dark flex flex-col gap-4">
+      <MoodCategories moods={moods} onMoodSelect={setSelectedMood} />
+      <NewReleases songs={thumbnailSongs} onAddFavourite={addToFavorites} />
     </div>
   );
 };
