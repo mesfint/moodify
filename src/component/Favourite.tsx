@@ -11,7 +11,16 @@ const Favourite = () => {
     playSong,
     pauseSong,
     currentSong,
+    currentTime,
   } = useMoodify();
+
+  //Format seconds MM:SS
+
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' + secs : secs} `;
+  };
 
   const handleTogglePlay = (song: SongItem) => {
     if (currentSong?.id === song.id) {
@@ -78,7 +87,11 @@ const Favourite = () => {
                     />
                   </Button>
                 </td>
-                <td>{fav.duration}</td>
+                <td>
+                  {currentSong?.id === fav.id && isPlaying
+                    ? formatTime(currentTime)
+                    : fav.duration}
+                </td>
               </tr>
             ))
           ) : (

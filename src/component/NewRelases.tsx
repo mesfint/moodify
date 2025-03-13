@@ -23,20 +23,26 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
     isPlaying,
     volume,
     playSong,
+    thumbnailSongs,
     togglePlayPause,
     setVolume,
   } = useMoodify();
 
   const handlePrev = () => {
-    const currentIndex = songs.findIndex((s) => s.id === currentSong?.id);
+    const currentIndex = thumbnailSongs.findIndex(
+      (s) => s.id === currentSong?.id
+    );
     const newIndex = currentIndex > 0 ? currentIndex - 1 : songs.length - 1;
-    playSong(songs[newIndex]);
+    playSong(thumbnailSongs[newIndex]);
   };
 
   const handleNext = () => {
-    const currentIndex = songs.findIndex((s) => s.id === currentSong?.id);
-    const newIndex = currentIndex < songs.length - 1 ? currentIndex + 1 : 0;
-    playSong(songs[newIndex]);
+    const currentIndex = thumbnailSongs.findIndex(
+      (s) => s.id === currentSong?.id
+    );
+    const newIndex =
+      currentIndex < thumbnailSongs.length - 1 ? currentIndex + 1 : 0;
+    playSong(thumbnailSongs[newIndex]);
   };
 
   const handleVolume = () => {

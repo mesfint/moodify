@@ -4,6 +4,7 @@ import { Moods, songData } from '../data/songs';
 import { fetchProfile, initiateLogin } from '../services/auth-service';
 import { Categories, SongItem } from '../types/moodify';
 import { UserProfile } from '../types/spotify';
+import { parseDurationToSeconds } from '../utils/convertToMMSS';
 import { getRandomSongs } from '../utils/random';
 
 interface MoodifyContextType {
@@ -17,6 +18,7 @@ interface MoodifyContextType {
   currentSong: SongItem | null;
   isPlaying: boolean;
   volume: number;
+  currentTime: number;
   addToFavorites: (song: SongItem) => void;
   removeFromFavorites: (id: number) => void;
   setSelectedMood: (mood: Categories) => void;
@@ -39,6 +41,7 @@ const defaultContext: MoodifyContextType = {
   currentSong: null,
   isPlaying: false,
   volume: 1,
+  currentTime: 0,
   addToFavorites: () => {},
   removeFromFavorites: () => {},
   setSelectedMood: () => {},
@@ -73,7 +76,8 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   const [currentSong, setCurrentSong] = useState<SongItem | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState(1);
-  const audioRef = useRef<HTMLAudioElement>(new Audio());
+  const [currentTime, setCurrentTime] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(new Audio()); //avoids <audio></audio>
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -108,6 +112,36 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     }
   }, [selectedMood, songs]);
 
+  //Countdown Effect
+  useEffect(() => {
+    //audioRef.current.currentTime = currentTime;
+    if (isPlaying && currentTime > 0) {
+      const interval = setInterval(() => {
+        setCurrentTime((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval); //cleanUp
+    } // Only loop when song ends
+    if (isPlaying && currentTime === 0 && currentSong) {
+      const currentIndex = favourites.findIndex((s) => s.id === currentSong.id);
+      if (currentIndex !== -1) {
+        const newIndex =
+          currentIndex < favourites.length - 1 ? currentIndex + 1 : 0;
+        playSong(favourites[newIndex]);
+      } else {
+        const currentThumbIndex = thumbnailSongs.findIndex(
+          (s) => s.id === currentSong.id
+        );
+        if (currentThumbIndex !== -1) {
+          const newThumbIndex =
+            currentThumbIndex < thumbnailSongs.length - 1
+              ? currentThumbIndex + 1
+              : 0;
+          playSong(thumbnailSongs[newThumbIndex]);
+        }
+      }
+    }
+  }, [isPlaying, currentTime, currentSong, favourites, thumbnailSongs]);
+
   const addToFavorites = (song: SongItem) => {
     if (!favourites.some((fav) => fav.id === song.id)) {
       const updatedFavourites = [song, ...favourites];
@@ -131,6 +165,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         .then(() => {
           setCurrentSong(song);
           setIsPlaying(true);
+          setCurrentTime(parseDurationToSeconds(song.duration));
         })
         .catch((error) => {
           console.error('Error playing song:', error);
@@ -160,6 +195,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
           .then(() => setIsPlaying(true))
           .catch((error) => console.error('Error', error));
         setIsPlaying(true);
+        setCurrentTime(parseDurationToSeconds(currentSong.duration));
       }
     }
   };
@@ -196,6 +232,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         currentSong,
         isPlaying,
         volume,
+        currentTime,
         addToFavorites,
         removeFromFavorites,
         setSelectedMood,
