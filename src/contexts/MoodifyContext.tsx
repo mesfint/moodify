@@ -19,6 +19,7 @@ interface MoodifyContextType {
   isPlaying: boolean;
   volume: number;
   currentTime: number;
+  notification: { message: string; visible: boolean };
   addToFavorites: (song: SongItem) => void;
   removeFromFavorites: (id: number) => void;
   setSelectedMood: (mood: Categories) => void;
@@ -42,6 +43,7 @@ const defaultContext: MoodifyContextType = {
   isPlaying: false,
   volume: 1,
   currentTime: 0,
+  notification: { message: '', visible: false },
   addToFavorites: () => {},
   removeFromFavorites: () => {},
   setSelectedMood: () => {},
@@ -74,6 +76,12 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     localStorage.getItem('access_token')
   );
   const [currentSong, setCurrentSong] = useState<SongItem | null>(null);
+
+  const [notification, setNotification] = useState<{
+    message: string;
+    visible: boolean;
+  }>({ message: '', visible: false });
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
@@ -96,31 +104,59 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     }
   }, []);
 
+  // useEffect(() => {
+  //   const filteredSongs =
+  //     selectedMood === 'All'
+  //       ? getRandomSongs(songs, 4)
+  //       : songs.filter((song) => song.mood === selectedMood).slice(0, 4);
+  //   setThumbnailSongs(filteredSongs);
+
+  //   if (filteredSongs.length > 0 && !currentSong) {
+  //     setCurrentSong(filteredSongs[0]);
+  //     if (audioRef.current) {
+  //       audioRef.current.src = filteredSongs[0].audioUrl; //Preload audio
+  //       audioRef.current.volume = volume;
+  //     }
+  //   }
+  // }, [selectedMood, songs]);
   useEffect(() => {
     const filteredSongs =
       selectedMood === 'All'
         ? getRandomSongs(songs, 4)
         : songs.filter((song) => song.mood === selectedMood).slice(0, 4);
     setThumbnailSongs(filteredSongs);
-
     if (filteredSongs.length > 0 && !currentSong) {
       setCurrentSong(filteredSongs[0]);
+      setCurrentTime(parseDurationToSeconds(filteredSongs[0].duration)); // Preload time
       if (audioRef.current) {
-        audioRef.current.src = filteredSongs[0].audioUrl; //Preload audio
+        audioRef.current.src = filteredSongs[0].audioUrl;
         audioRef.current.volume = volume;
+        // Auto-play attempt (might fail due to policy)
+        audioRef.current
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((error) => {
+            console.error('Auto-play blocked:', error);
+            setIsPlaying(false); // Ready for manual play
+          });
       }
     }
   }, [selectedMood, songs]);
 
-  //Countdown Effect
+  //Time Countdown Effect
   useEffect(() => {
-    //audioRef.current.currentTime = currentTime;
-    if (isPlaying && currentTime > 0) {
+    if (isPlaying && volume && currentSong) {
       const interval = setInterval(() => {
-        setCurrentTime((prev) => prev - 1);
+        if (audioRef.current && !isNaN(audioRef.current.duration)) {
+          setCurrentTime(
+            Math.floor(audioRef.current.duration - audioRef.current.currentTime)
+          );
+        }
       }, 1000);
-      return () => clearInterval(interval); //cleanUp
-    } // Only loop when song ends
+      return () => clearInterval(interval);
+    } // Only loop when current song ends
     if (isPlaying && currentTime === 0 && currentSong) {
       const currentIndex = favourites.findIndex((s) => s.id === currentSong.id);
       if (currentIndex !== -1) {
@@ -140,13 +176,19 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         }
       }
     }
-  }, [isPlaying, currentTime, currentSong, favourites, thumbnailSongs]);
+  }, [isPlaying, volume, currentSong, favourites, thumbnailSongs]);
+
+  const notify = (message: string) => {
+    setNotification({ message, visible: true });
+    setTimeout(() => setNotification({ message: '', visible: false }), 2300);
+  };
 
   const addToFavorites = (song: SongItem) => {
     if (!favourites.some((fav) => fav.id === song.id)) {
       const updatedFavourites = [song, ...favourites];
       setFavourites(updatedFavourites);
       localStorage.setItem('favSongs', JSON.stringify(updatedFavourites));
+      notify(updatedFavourites && `Added ${song.title} to your Favourites`);
     }
   };
 
@@ -177,28 +219,45 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   const pauseSong = () => {
     if (audioRef.current) {
       audioRef.current.pause();
+      setCurrentTime(
+        Math.floor(audioRef.current.duration - audioRef.current.currentTime)
+      ); //save spot
       setIsPlaying(false);
     }
   };
-
   const togglePlayPause = () => {
-    if (audioRef.current) {
+    if (audioRef.current && currentSong) {
       if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else if (currentSong) {
-        audioRef.current.src = currentSong.audioUrl; //refresh the src
+        pauseSong();
+      } else {
         audioRef.current.volume = volume;
-        //continue authematically play for next song onclick
+        audioRef.current.currentTime = audioRef.current.duration - currentTime; // Resume from spot
         audioRef.current
           .play()
           .then(() => setIsPlaying(true))
-          .catch((error) => console.error('Error', error));
-        setIsPlaying(true);
-        setCurrentTime(parseDurationToSeconds(currentSong.duration));
+          .catch((error) => console.error('Error resuming:', error));
       }
     }
   };
+
+  // const togglePlayPause = () => {
+  //   if (audioRef.current && currentSong) {
+  //     if (isPlaying) {
+  //       pauseSong();
+  //     } else {
+  //       audioRef.current.src = currentSong.audioUrl;
+  //       audioRef.current.volume = volume;
+  //       //continue authematically play for next song onclick
+  //       //audioRef.current.currentTime = audioRef.current.duration - currentTime; // Resume from spot
+  //       audioRef.current
+  //         .play()
+  //         .then(() => setIsPlaying(true))
+  //         .catch((error) => console.error('Error', error));
+  //       setIsPlaying(true);
+  //       setCurrentTime(parseDurationToSeconds(currentSong.duration));
+  //     }
+  //   }
+  // };
 
   const setVolume = (newVolume: number) => {
     setVolumeState(newVolume);
@@ -233,6 +292,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         isPlaying,
         volume,
         currentTime,
+        notification,
         addToFavorites,
         removeFromFavorites,
         setSelectedMood,

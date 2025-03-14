@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useMoodify } from '../hooks/useMoodify';
 import { SongItem } from '../types/moodify';
+import { formatTime } from '../utils/formatTime';
 import { Button } from './Button';
 
 interface NewRelasesProps {
@@ -26,6 +27,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
     thumbnailSongs,
     togglePlayPause,
     setVolume,
+    currentTime,
   } = useMoodify();
 
   const handlePrev = () => {
@@ -57,7 +59,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             <img
               src={currentSong.thumbnailUrl || '...'}
               alt={currentSong.title}
-              className="w-1/2 h-auto"
+              className="w-1/2 h-64 object-cover"
             />
             <div className="w-1/2 h-auto bg-gradient-to-r from-secondary-text-light via-secondary-text-dim to-secondary-dark text-secondary-text-dim p-6">
               <p className="text-white">{currentSong.title}</p>
@@ -92,6 +94,14 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             <ChevronRight />
           </Button>
         </div>
+        <div className="">
+          {' '}
+          {/* {currentSong?.id === currentSong?.id && isPlaying
+            ? formatTime(currentTime)
+            : '0:00'} */}
+          {isPlaying ? formatTime(currentTime) : currentSong?.duration}
+        </div>
+
         <div className="flex justify-between items-center gap-2">
           {volume ? (
             <Button variant="default" size="icon" onClick={handleVolume}>
@@ -103,13 +113,6 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             </Button>
           )}
 
-          {/* <Button variant="default" size="icon">
-            {volume ? (
-              <Volume2 onClick={handleVolume} />
-            ) : (
-              <VolumeOff onClick={handleVolume} />
-            )}
-          </Button> */}
           <Button
             variant="default"
             size="icon"

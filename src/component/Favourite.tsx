@@ -1,6 +1,7 @@
 import { Pause, Play, Trash2 } from 'lucide-react';
 import { useMoodify } from '../hooks/useMoodify';
 import { SongItem } from '../types/moodify';
+import { formatTime } from '../utils/formatTime';
 import { Button } from './Button';
 
 const Favourite = () => {
@@ -13,14 +14,6 @@ const Favourite = () => {
     currentSong,
     currentTime,
   } = useMoodify();
-
-  //Format seconds MM:SS
-
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? '0' + secs : secs} `;
-  };
 
   const handleTogglePlay = (song: SongItem) => {
     if (currentSong?.id === song.id) {

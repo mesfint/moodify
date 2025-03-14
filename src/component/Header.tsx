@@ -23,7 +23,7 @@ const Header = ({
   return (
     <header
       role="banner"
-      className="flex items-center justify-between mx-4 py-4 bg-secondary-dark"
+      className="flex sticky top-0  items-center justify-between mx-4 py-4 bg-secondary-dark"
     >
       {/* Logo */}
       <div className="flex-shrink-0 bg-gradient-to-b from-secondary-text-dim via-secondary-dark to-secondary-dark p-3 rounded-lg shadow-md">
