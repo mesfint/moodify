@@ -1,4 +1,4 @@
-import { Pause, Play, Trash2 } from 'lucide-react';
+import { Pause, Play, Search, Trash2 } from 'lucide-react';
 import { useMoodify } from '../hooks/useMoodify';
 import { SongItem } from '../types/moodify';
 import { formatTime } from '../utils/formatTime';
@@ -29,6 +29,15 @@ const Favourite = () => {
   };
   return (
     <>
+      {/* Search Form */}
+      <form className="relative mx-4 w-96">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-text-light" />
+        <input
+          type="text"
+          placeholder="Search"
+          className="w-full pl-10 pr-4 py-2 text-sm border border-secondary-border rounded-full text-secondary-text-light bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
+        />
+      </form>
       <table className="table-auto w-full text-left gap-2 ">
         <thead className="mb-6">
           <tr className="border-b mb-4">

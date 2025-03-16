@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, Search } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { UserProfile } from '../types/spotify';
@@ -23,22 +23,12 @@ const Header = ({
   return (
     <header
       role="banner"
-      className="flex sticky top-0  items-center justify-between mx-4 py-4 bg-secondary-dark"
+      className="sticky top-0 left-0 z-10 flex  justify-end mx-4 py-4 bg-secondary-dark"
     >
       {/* Logo */}
-      <div className="flex-shrink-0 bg-gradient-to-b from-secondary-text-dim via-secondary-dark to-secondary-dark p-3 rounded-lg shadow-md">
-        {/* <h3 className="text-white font-display font-bold text-lg">Moodify</h3> */}
-      </div>
-
-      {/* Search Form */}
-      <form className="relative mx-4 w-96">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-text-light" />
-        <input
-          type="text"
-          placeholder="Search"
-          className="w-full pl-10 pr-4 py-2 text-sm border border-secondary-border rounded-full text-secondary-text-light bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
-        />
-      </form>
+      {/* <div className="flex-shrink-0 bg-gradient-to-b from-secondary-text-dim via-secondary-dark to-secondary-dark p-3 rounded-lg shadow-md"> */}
+      {/* <h3 className="text-white font-display font-bold text-lg">Moodify</h3> */}
+      {/* </div> */}
 
       {/* Auth Section */}
       <div className="flex items-center gap-4 mx-4">

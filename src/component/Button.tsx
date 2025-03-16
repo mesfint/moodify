@@ -2,8 +2,10 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-type ButtonProps = VariantProps<typeof buttonStyles> & ComponentProps<'button'>;
-
+type ButtonProps = VariantProps<typeof buttonStyles> &
+  ComponentProps<'button'> & {
+    tooltip?: string;
+  };
 export const buttonStyles = cva(
   ['font-semibold', 'transition-colors', 'rounded'],
   {
@@ -48,11 +50,24 @@ export const buttonStyles = cva(
     },
   }
 );
-export const Button = ({ variant, size, className, ...props }: ButtonProps) => {
+export const Button = ({
+  variant,
+  size,
+  className,
+  tooltip,
+  ...props
+}: ButtonProps) => {
   return (
-    <button
-      {...props}
-      className={twMerge(buttonStyles({ variant, size }), className)}
-    />
+    <div className="relative group">
+      <button
+        {...props}
+        className={twMerge(buttonStyles({ variant, size }), className)}
+      />
+      {tooltip && (
+        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-neutral-900 text-white text-sm p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+          {tooltip}
+        </span>
+      )}
+    </div>
   );
 };

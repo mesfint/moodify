@@ -11,6 +11,7 @@ const App = () => {
       <Routes>
         <Route index element={<Home />} />
         <Route path="/favourite" element={<Favourite />} />
+
         <Route path="/callback" element={<Callback />} />
       </Routes>
       <Toast />

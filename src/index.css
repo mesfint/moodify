@@ -38,7 +38,7 @@ the existing once, do like this
 /* note that names are changed in v4: https://tailwindcss.com/docs/theme#theme-variable-namespaces */
 
 /* Style scroll bar */
-/* * {
+* {
   scrollbar-width: thin;
 }
 
@@ -56,4 +56,4 @@ the existing once, do like this
 
 .scrollbar-hidden:hover::-webkit-scrollbar-thumb {
   @apply bg-secondary-border;
-} */
+}
