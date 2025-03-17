@@ -1,4 +1,4 @@
-import { Pause, Play, Search, Trash2 } from 'lucide-react';
+import { MoveDown, MoveUp, Pause, Play, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useMoodify } from '../hooks/useMoodify';
 import { SongItem } from '../types/moodify';
@@ -7,6 +7,9 @@ import { Button } from './Button';
 
 const Favourite = () => {
   const [searchTerm, setSearchTerm] = useState<string | ''>('');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(
+    null
+  );
 
   const {
     favourites,
@@ -24,6 +27,18 @@ const Favourite = () => {
       )
     : favourites;
 
+  // sort by artist
+  const sortedFavourites = sortDirection
+    ? [...filteredFavourite].sort((a, b) =>
+        sortDirection === 'asc'
+          ? a.artist.localeCompare(b.artist)
+          : b.artist.localeCompare(a.artist)
+      )
+    : filteredFavourite;
+
+  const handleSort = () => {
+    setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+  };
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -57,18 +72,37 @@ const Favourite = () => {
       </div>
       <table className="table-auto w-full text-left gap-2 ">
         <thead>
-          <tr className="border-b border-neutral-500">
-            <th className="px-4 py-2 hidden md:table-cell">Song</th>
-            <th className="px-4 py-2">Artist</th>
-            <th className="px-4 py-2">Title</th>
-            <th className="px-4 py-2">Play/Pause</th>
-            <th className="px-4 py-2">Operation</th>
-            <th className="px-4 py-2">Time</th>
+          <tr>
+            <th className="px-2  hidden md:table-cell">Song</th>
+            <th className="px-2  ">
+              <Button
+                variant="default"
+                size="icon"
+                tooltip={sortDirection === 'asc' ? 'Z-A' : 'A-Z'}
+                onClick={handleSort}
+                className="ml-2"
+              >
+                {sortDirection === 'asc' ? <MoveUp /> : <MoveDown />}
+              </Button>
+              Artist
+            </th>
+            <th className="px-2 ">Title</th>
+            {/* <th>
+              <Button onClick={sortByName}>{<ArrowUpDown />}</Button>
+            </th> */}
+            <th className="px-2 ">Play/Pause</th>
+            <th className="px-2 ">Operation</th>
+            <th className="px-2 ">Time</th>
           </tr>
         </thead>
+        <tr>
+          <td colSpan={6}>
+            <hr className="h-px my-4  border-0 dark:bg-neutral-800 w-full" />
+          </td>
+        </tr>
         <tbody>
-          {filteredFavourite.length > 0 ? (
-            filteredFavourite.map((fav) => (
+          {sortedFavourites.length > 0 ? (
+            sortedFavourites.map((fav) => (
               <tr
                 key={fav.id}
                 className={

@@ -21,10 +21,10 @@ const Layout = ({ children }: LayoutProps) => {
           profile={profile}
           onLogin={login}
         />
-        <main className="flex-1 overflow-y-auto pt-20 lg:pt-20">
+        <main className="mb-auto flex-1 overflow-y-auto  pt-20 lg:pt-20">
           {children || <Outlet />}
         </main>
-        <footer className="bg-secondary-dark text-gray-400 p-4 text-center">
+        <footer className="sticky top-[100vh] bg-neutral-950  my-4 border-t-1 dark:border-neutral-800 w-245 text-gray-400 p-4 text-center">
           <p>© 2025 Moodify. Inspired by Spotify.</p>
           <div className="flex justify-center gap-4 mt-2">
             <a href="#" className="hover:text-green-500">
