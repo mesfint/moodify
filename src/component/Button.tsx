@@ -1,11 +1,13 @@
 import { cva, VariantProps } from 'class-variance-authority';
 import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { useMoodify } from '../hooks/useMoodify';
 
 type ButtonProps = VariantProps<typeof buttonStyles> &
   ComponentProps<'button'> & {
     tooltip?: string;
   };
+
 export const buttonStyles = cva(
   ['font-semibold', 'transition-colors', 'rounded'],
   {
@@ -57,6 +59,7 @@ export const Button = ({
   tooltip,
   ...props
 }: ButtonProps) => {
+  const { theme } = useMoodify();
   return (
     <div className="relative group">
       <button
@@ -64,7 +67,9 @@ export const Button = ({
         className={twMerge(buttonStyles({ variant, size }), className)}
       />
       {tooltip && (
-        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-neutral-900 text-white text-sm p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+        <span
+          className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-secondary-text-light text-secondary-text-dim'} z-10'} text-sm p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity`}
+        >
           {tooltip}
         </span>
       )}

@@ -19,6 +19,7 @@ const Favourite = () => {
     pauseSong,
     currentSong,
     currentTime,
+    theme,
   } = useMoodify();
 
   const filteredFavourite = searchTerm
@@ -80,7 +81,7 @@ const Favourite = () => {
                 size="icon"
                 tooltip={sortDirection === 'asc' ? 'Z-A' : 'A-Z'}
                 onClick={handleSort}
-                className="ml-2"
+                className={`ml-2 border-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
               >
                 {sortDirection === 'asc' ? <MoveUp /> : <MoveDown />}
               </Button>
@@ -124,6 +125,7 @@ const Favourite = () => {
                     variant="default"
                     size="icon"
                     onClick={() => handleTogglePlay(fav)}
+                    className={`border-1 mb-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'} `}
                   >
                     {currentSong?.id === fav.id && isPlaying ? (
                       <Pause />
@@ -135,7 +137,7 @@ const Favourite = () => {
                 <td>
                   <Button variant="default" size="icon">
                     <Trash2
-                      className="text-red-600 cursor-pointer"
+                      className={` boder-1 text-red-600 cursor-pointer  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
                       onClick={() => removeFromFavorites(fav.id)}
                     />
                   </Button>

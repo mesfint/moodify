@@ -29,6 +29,8 @@ interface MoodifyContextType {
   pauseSong: () => void;
   togglePlayPause: () => void;
   setVolume: (volume: number) => void;
+  theme: 'dark' | 'light';
+  toggleTheme: (theme: string) => void;
 }
 
 const defaultContext: MoodifyContextType = {
@@ -53,6 +55,8 @@ const defaultContext: MoodifyContextType = {
   pauseSong: () => {},
   togglePlayPause: () => {},
   setVolume: () => {},
+  theme: 'dark',
+  toggleTheme: () => {},
 };
 
 //create context
@@ -85,6 +89,9 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState(1);
   const [currentTime, setCurrentTime] = useState(0);
+  const [theme, setTheme] = useState<'dark' | 'light'>(
+    localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
+  );
   const audioRef = useRef<HTMLAudioElement>(new Audio()); //avoids <audio></audio>
   const navigate = useNavigate();
 
@@ -181,6 +188,14 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   const notify = (message: string) => {
     setNotification({ message, visible: true });
     setTimeout(() => setNotification({ message: '', visible: false }), 2300);
+  };
+
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const newTheme = prev === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      return newTheme;
+    });
   };
 
   const addToFavorites = (song: SongItem) => {
@@ -302,6 +317,8 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         pauseSong,
         togglePlayPause,
         setVolume,
+        theme,
+        toggleTheme,
       }}
     >
       {children}

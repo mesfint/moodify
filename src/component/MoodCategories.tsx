@@ -8,7 +8,7 @@ interface CategoriesProps {
 }
 
 const MoodCategories = ({ moods, onMoodSelect }: CategoriesProps) => {
-  const { selectedMood } = useMoodify();
+  const { selectedMood, theme } = useMoodify();
 
   return (
     <div className="flex gap-2 px-4 overflow-x-auto ">
@@ -17,7 +17,7 @@ const MoodCategories = ({ moods, onMoodSelect }: CategoriesProps) => {
           variant="default"
           key={index}
           onClick={() => onMoodSelect(mood)}
-          className={`px-4 py-2 ${selectedMood === mood ? 'bg-secondary-neutral-950 text-white underline' : 'bg-neutral-800'}  text-secondary-text-light rounded-full shadow-md cursor-pointer flex-wrap`}
+          className={`  border-1 rounded-full shadow-md cursor-pointer flex-wrap px-4 py-2 ${selectedMood === mood ? 'bg-secondary-neutral-950 text-white underline' : 'bg-neutral-800'}  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
         >
           {mood}
         </Button>

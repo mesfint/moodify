@@ -17,7 +17,17 @@
   --color-secondary-text-dark: var(--color-neutral-950);
   --color-secondary-dark: var(--color-neutral-950);
   --color-secondary-dark-hover: var(--color-neutral-900);
-  /* ... */
+  /* dark mode overrides */
+  .dark {
+    --secondary-dark: #1a1a1a;
+    --secondary-text-light: #d1d5db;
+    --secondary-text-dim: #4b5563;
+    --secondary-border: #374151;
+  }
+  .dark body {
+    background-color: var(--secondary-dark);
+    color: var(--secondary-text-light);
+  }
 }
 /* @plugin "blahblah" */
 /* @import "tailwindcss" prefix(tw);*/
