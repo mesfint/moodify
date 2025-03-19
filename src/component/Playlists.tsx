@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { PenLine, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useMoodify } from '../hooks/useMoodify';
@@ -54,9 +54,13 @@ const Playlists = () => {
   }
 
   return (
-    <div>
-      <h2>Playlists</h2>
-      <form onSubmit={handleSubmit} className="flex mx-4 w-56">
+    <div className="flex flex-col justify-center items-center">
+      <h2 className="text-xl font-bold mb-4">Create Playlists</h2>
+      <form onSubmit={handleSubmit} className="relative w-full md:w-64 flex">
+        <PenLine
+          size={20}
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-text-light"
+        />
         <input
           type="text"
           placeholder="Add Playlist Name"
@@ -70,9 +74,12 @@ const Playlists = () => {
           type="submit"
           className="cursor-pointer"
         >
-          <Plus />
+          <span>
+            <Plus />
+          </span>
         </Button>
       </form>
+
       <div className="mt-4">
         {playlists.length > 0 ? (
           playlists.map((playlist) => (

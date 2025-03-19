@@ -1,10 +1,8 @@
-import MoodCategories from '../component/MoodCategories';
-import NewReleases from '../component/NewRelases';
+import NewReleases from '../component/NewReleases';
 import { useMoodify } from '../hooks/useMoodify';
 
 const Home = () => {
-  const { theme, moods, setSelectedMood, songs, addToFavorites, selectedMood } =
-    useMoodify();
+  const { theme, songs, addToFavorites, selectedMood } = useMoodify();
   const filteredSongs =
     selectedMood === 'All'
       ? songs
@@ -12,13 +10,8 @@ const Home = () => {
 
   return (
     <div
-      className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'} flex flex-col flex-1 gap-4 pt-16 lg:pt-0`}
+      className={`flex flex-col flex-1 gap-4 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
     >
-      <div
-        className={`fixed top-16  md:left-58 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'} z-10 pt-2 pb-2 `}
-      >
-        <MoodCategories moods={moods} onMoodSelect={setSelectedMood} />
-      </div>
       <NewReleases songs={filteredSongs} onAddFavourite={addToFavorites} />
     </div>
   );

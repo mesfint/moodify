@@ -36,7 +36,6 @@ const Favourite = () => {
       )
     : favourites;
 
-  // sort by artist
   const sortedFavourites = sortDirection
     ? [...filteredFavourite].sort((a, b) =>
         sortDirection === 'asc'
@@ -51,24 +50,20 @@ const Favourite = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
-
   const handleTogglePlay = (song: SongItem) => {
     if (currentSong?.id === song.id) {
-      if (isPlaying) {
-        pauseSong();
-      } else {
-        playSong(song);
-      }
+      if (isPlaying) pauseSong();
+      else playSong(song);
     } else {
-      // New song clicked—play it
       playSong(song);
     }
   };
+
   return (
-    <>
+    <div className="flex flex-col gap-4 mx-4">
       {/* Search Form */}
-      <div className="flex flex-col xs:flex-1 md:justify-end md:items-end mx-4 mb-4">
-        <form className=" relative mx-4 w-56">
+      <div className="flex justify-end mb-2">
+        <form className="relative w-full md:w-64">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-text-light" />
           <input
             type="text"
@@ -79,41 +74,59 @@ const Favourite = () => {
           />
         </form>
       </div>
-      <table className="table-auto w-full text-left gap-2 ">
+
+      <table className="w-full text-left">
         <thead>
-          <tr>
-            <th className="px-2  hidden md:table-cell">Song</th>
-            <th className="px-2  ">
+          <tr
+            className={
+              theme === 'dark'
+                ? 'text-secondary-text-light'
+                : 'text-secondary-text-dim'
+            }
+          >
+            {' '}
+            <th className="px-2 hidden md:table-cell">Song</th>
+            <th className="px-2">
               <Button
                 variant="default"
                 size="icon"
                 tooltip={sortDirection === 'asc' ? 'Z-A' : 'A-Z'}
                 onClick={handleSort}
-                className={`ml-2 border-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+                className={
+                  theme === 'dark'
+                    ? 'bg-secondary-text-dim text-secondary-text-light'
+                    : ' bg-white text-secondary-text-dim'
+                } // Theme on Button
               >
                 {sortDirection === 'asc' ? <MoveUp /> : <MoveDown />}
               </Button>
               Artist
             </th>
-            <th className="px-2 ">Title</th>
-            {/* <th>
-              <Button onClick={sortByName}>{<ArrowUpDown />}</Button>
-            </th> */}
-            <th className="px-2 ">Play/Pause</th>
-            <th className="px-2 ">Operation</th>
-            <th className="px-2 ">
-              <Button variant="ghost" size="icon" tooltip="duration">
+            <th className="px-2">Title</th>
+            <th className="px-2">Play/Pause</th>
+            <th className="px-2">Operation</th>
+            <th className="px-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                tooltip="duration"
+                className={
+                  theme === 'dark'
+                    ? 'text-secondary-text-light'
+                    : 'text-secondary-text-dim'
+                }
+              >
                 <Clock />
               </Button>
             </th>
           </tr>
         </thead>
-        <tr>
-          <td colSpan={6}>
-            <hr className="h-px my-4  border-0 dark:bg-neutral-800 w-full" />
-          </td>
-        </tr>
         <tbody>
+          <tr>
+            <td colSpan={6}>
+              <hr className="my-4 border-0 dark:bg-neutral-800" />
+            </td>
+          </tr>
           {sortedFavourites.length > 0 ? (
             sortedFavourites.map((fav) => (
               <tr
@@ -121,12 +134,14 @@ const Favourite = () => {
                 className={
                   currentSong?.id === fav.id && isPlaying
                     ? 'bg-secondary-text-dim'
-                    : 'bg-none'
+                    : theme === 'dark'
+                      ? 'text-secondary-text-light'
+                      : 'text-secondary-text-dim'
                 }
               >
                 <td className="hidden md:table-cell">
                   <img
-                    className="w-8 h-8     rounded-md mr-2"
+                    className="w-8 h-8 rounded-md mr-2"
                     src={fav.thumbnailUrl}
                   />
                 </td>
@@ -137,7 +152,11 @@ const Favourite = () => {
                     variant="default"
                     size="icon"
                     onClick={() => handleTogglePlay(fav)}
-                    className={`border-1 mb-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'} `}
+                    className={
+                      theme === 'dark'
+                        ? 'bg-secondary-text-light'
+                        : 'text-secondary-text-dim'
+                    } // Theme on Button
                   >
                     {currentSong?.id === fav.id && isPlaying ? (
                       <Pause />
@@ -149,7 +168,7 @@ const Favourite = () => {
                 <td>
                   <Button variant="default" size="icon">
                     <Trash2
-                      className={` boder-1 text-red-600 cursor-pointer  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+                      className="text-red-600 cursor-pointer" // Kept specific color, no theme override here
                       onClick={() => removeFromFavorites(fav.id)}
                     />
                   </Button>
@@ -162,13 +181,24 @@ const Favourite = () => {
               </tr>
             ))
           ) : (
-            <tr className="col-span-10">
-              <td>No Fav song Yet.</td>
+            <tr>
+              <td
+                colSpan={6}
+                className={
+                  theme === 'dark'
+                    ? 'text-secondary-text-light'
+                    : 'text-secondary-text-dim'
+                }
+              >
+                {' '}
+                {/* Added theme */}
+                No Fav song Yet.
+              </td>
             </tr>
           )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 
