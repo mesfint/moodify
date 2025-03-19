@@ -7,6 +7,12 @@ import { UserProfile } from '../types/spotify';
 import { parseDurationToSeconds } from '../utils/convertToMMSS';
 import { getRandomSongs } from '../utils/random';
 
+interface Playlist {
+  id: string;
+  name: string;
+  songs: SongItem[];
+}
+
 interface MoodifyContextType {
   profile: UserProfile | null;
   songs: SongItem[];
@@ -31,6 +37,10 @@ interface MoodifyContextType {
   setVolume: (volume: number) => void;
   theme: 'dark' | 'light';
   toggleTheme: (theme: string) => void;
+  playlists: Playlist[];
+  createPlaylist: (name: string) => void;
+  addToPlayLists: (song: SongItem, playlistId: string) => void;
+  removeFromPlayLists: (id: number, playlistId: string) => void;
 }
 
 const defaultContext: MoodifyContextType = {
@@ -57,6 +67,10 @@ const defaultContext: MoodifyContextType = {
   setVolume: () => {},
   theme: 'dark',
   toggleTheme: () => {},
+  playlists: [],
+  createPlaylist: () => {},
+  addToPlayLists: () => {},
+  removeFromPlayLists: () => {},
 };
 
 //create context
@@ -73,6 +87,11 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     const storedFavs = localStorage.getItem('favSongs');
     return storedFavs ? JSON.parse(storedFavs) : [];
   });
+  const [playlists, setPlaylists] = useState<Playlist[]>(() => {
+    const storedPlaylists = localStorage.getItem('playlists');
+    return storedPlaylists ? JSON.parse(storedPlaylists) : [];
+  });
+
   const [moods] = useState(Moods);
   const [selectedMood, setSelectedMood] = useState<Categories>('All');
   const [thumbnailSongs, setThumbnailSongs] = useState<SongItem[]>([]);
@@ -213,6 +232,37 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     localStorage.setItem('favSongs', JSON.stringify(updatedFavourites));
   };
 
+  const createPlaylist = (name: string) => {
+    const newPlaylist = { id: Date.now().toString(), name, songs: [] };
+    const updatedPlayLists = [newPlaylist, ...playlists];
+    setPlaylists(updatedPlayLists);
+    localStorage.setItem('playlists', JSON.stringify(updatedPlayLists));
+    notify(`Created playlist: ${name}`);
+  };
+  const addToPlayLists = (song: SongItem, playlistId: string) => {
+    const updatedPlaylists = playlists.map((playlist) =>
+      playlist.id === playlistId &&
+      !playlist.songs.some((s) => s.id === song.id)
+        ? { ...playlist, songs: [song, ...playlist.songs] }
+        : playlist
+    );
+    setPlaylists(updatedPlaylists);
+    localStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
+    notify(`Added ${song.title} to playlist`);
+  };
+  const removeFromPlayLists = (id: number, playlistId: string) => {
+    const updatedPlaylists = playlists.map((playlist) =>
+      playlist.id === playlistId
+        ? {
+            ...playlist,
+            songs: playlist.songs.filter((song) => song.id !== id),
+          }
+        : playlist
+    );
+    setPlaylists(updatedPlaylists);
+    localStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
+  };
+
   const playSong = (song: SongItem) => {
     if (audioRef.current) {
       audioRef.current.src = song.audioUrl;
@@ -319,6 +369,10 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         setVolume,
         theme,
         toggleTheme,
+        playlists,
+        createPlaylist,
+        addToPlayLists,
+        removeFromPlayLists,
       }}
     >
       {children}

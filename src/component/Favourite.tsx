@@ -1,4 +1,12 @@
-import { MoveDown, MoveUp, Pause, Play, Search, Trash2 } from 'lucide-react';
+import {
+  Clock,
+  MoveDown,
+  MoveUp,
+  Pause,
+  Play,
+  Search,
+  Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useMoodify } from '../hooks/useMoodify';
 import { SongItem } from '../types/moodify';
@@ -93,7 +101,11 @@ const Favourite = () => {
             </th> */}
             <th className="px-2 ">Play/Pause</th>
             <th className="px-2 ">Operation</th>
-            <th className="px-2 ">Time</th>
+            <th className="px-2 ">
+              <Button variant="ghost" size="icon" tooltip="duration">
+                <Clock />
+              </Button>
+            </th>
           </tr>
         </thead>
         <tr>
