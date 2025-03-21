@@ -104,7 +104,7 @@ const Favourite = () => {
             </th>
             <th className="px-2">Title</th>
             <th className="px-2">Play/Pause</th>
-            <th className="px-2">Operation</th>
+            <th className="px-2">Delete</th>
             <th className="px-2">
               <Button
                 variant="ghost"
@@ -152,11 +152,11 @@ const Favourite = () => {
                     variant="default"
                     size="icon"
                     onClick={() => handleTogglePlay(fav)}
-                    className={
+                    className={`bg-white border-1 mb-2 cursor-pointer ${
                       theme === 'dark'
-                        ? 'bg-secondary-text-light'
+                        ? 'bg-secondary-text-dim'
                         : 'text-secondary-text-dim'
-                    } // Theme on Button
+                    }`}
                   >
                     {currentSong?.id === fav.id && isPlaying ? (
                       <Pause />
@@ -166,11 +166,17 @@ const Favourite = () => {
                   </Button>
                 </td>
                 <td>
-                  <Button variant="default" size="icon">
-                    <Trash2
-                      className="text-red-600 cursor-pointer" // Kept specific color, no theme override here
-                      onClick={() => removeFromFavorites(fav.id)}
-                    />
+                  <Button
+                    variant="default"
+                    size="icon"
+                    className={` cursor-pointer border-1   ${
+                      theme === 'dark'
+                        ? 'hover:bg-secondary-text-dim  text-secondary-text-light'
+                        : 'bg-white hover:bg-secondary-text-light text-secondary-text-dim'
+                    }`}
+                    onClick={() => removeFromFavorites(fav.id)}
+                  >
+                    <Trash2 />
                   </Button>
                 </td>
                 <td>

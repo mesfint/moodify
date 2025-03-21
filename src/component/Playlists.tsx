@@ -1,14 +1,25 @@
-import { PenLine, Plus } from 'lucide-react';
+import { Pause, PenLine, Play, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useMoodify } from '../hooks/useMoodify';
+import { SongItem } from '../types/moodify';
+import { formatTime } from '../utils/formatTime';
 import { Button } from './Button';
 
 const Playlists = () => {
-  const { playlists, createPlaylist } = useMoodify(); // Fixed typo: createPlaylist
+  const {
+    playlists,
+    createPlaylist,
+    removeFromPlayLists,
+    deletePlaylist,
+    theme,
+    currentTime,
+    isPlaying,
+    currentSong,
+    playSong,
+    pauseSong,
+  } = useMoodify();
   const [playlistName, setPlaylistName] = useState('');
-
-  //useParams pulls playlistId from the URL
   const { playlistId } = useParams();
 
   const selectedPlaylist = playlists.find((p) => p.id === playlistId);
@@ -20,26 +31,101 @@ const Playlists = () => {
       setPlaylistName('');
     }
   };
+  const handleDeletePlaylist = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deletePlaylist(id);
+  };
+
+  const handleTogglePlay = (song: SongItem) => {
+    if (currentSong?.id === song.id) {
+      console.log('currentsong', currentSong.id, song.id);
+      if (isPlaying) pauseSong();
+      else playSong(song);
+    } else {
+      playSong(song);
+    }
+  };
 
   if (playlistId && selectedPlaylist) {
     return (
-      <div className="mx-4">
-        <h2>{selectedPlaylist.name}</h2>
+      <div className="flex flex-col">
+        <h2 className="mx-5 py-2">{selectedPlaylist.name}</h2>
         <table className="w-full">
           <thead>
             <tr>
-              <th>Song</th>
-              <th>Artist</th>
-              <th>Duration</th>
+              {/* <th className="px-2">#</th>
+              <th className="px-2">Song</th>
+              <th className="px-2">Artist</th>
+              <th className="px-2">Duration</th> */}
             </tr>
           </thead>
-          <tbody>
+          <tbody className=" ">
             {selectedPlaylist.songs.length > 0 ? (
-              selectedPlaylist.songs.map((song) => (
-                <tr key={song.id}>
-                  <td>{song.title}</td>
-                  <td>{song.artist}</td>
-                  <td>{song.duration}</td>
+              selectedPlaylist.songs.map((song, index: number) => (
+                <tr
+                  className={`  ${
+                    theme === 'dark'
+                      ? 'hover:bg-secondary-text-dim text-secondary-text-light'
+                      : 'hover:bg-secondary-text-light text-secondary-text-dim'
+                  }`}
+                  key={song.id}
+                >
+                  <div className="flex gap-2 mb-2">
+                    <td className="text-md text-center mx-2">{index + 1}</td>
+                    <td className="flex gap-4">
+                      <img
+                        className="w-8 h-8 rounded mt-1"
+                        src={song.thumbnailUrl}
+                      />
+                      <span className="flex  flex-col ">
+                        <span className="font-bold">{song.title}</span>
+                        <span className="text-sm">{song.artist}</span>
+                      </span>
+                    </td>
+                  </div>
+                  <td>
+                    <Button
+                      variant="default"
+                      size="icon"
+                      onClick={() => handleTogglePlay(song)}
+                      className={`bg-white border-1 mb-2 cursor-pointer ${
+                        theme === 'dark'
+                          ? 'bg-secondary-text-dim'
+                          : 'text-secondary-text-dim'
+                      }`}
+                    >
+                      {currentSong?.id === song.id && isPlaying ? (
+                        <Pause />
+                      ) : (
+                        <Play />
+                      )}
+                    </Button>
+                  </td>
+
+                  <td className="">
+                    <Button
+                      variant="default"
+                      size="icon"
+                      className={` cursor-pointer border-1  ${
+                        theme === 'dark'
+                          ? 'hover:bg-secondary-text-dim  text-secondary-text-light'
+                          : 'bg-white hover:bg-secondary-text-light text-secondary-text-dim'
+                      }`}
+                      onClick={() => removeFromPlayLists(song.id, playlistId)}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </td>
+
+                  <td>
+                    {currentSong?.id === song.id && isPlaying
+                      ? formatTime(currentTime)
+                      : song.duration}
+                  </td>
                 </tr>
               ))
             ) : (
@@ -54,8 +140,8 @@ const Playlists = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <h2 className="text-xl font-bold mb-4">Create Playlists</h2>
+    <div className="flex flex-col gap-4 h-full">
+      <h2 className="text-xl font-bold">Create Playlists</h2>
       <form onSubmit={handleSubmit} className="relative w-full md:w-64 flex">
         <PenLine
           size={20}
@@ -80,15 +166,39 @@ const Playlists = () => {
         </Button>
       </form>
 
-      <div className="mt-4">
+      {/* Playlist cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {playlists.length > 0 ? (
-          playlists.map((playlist) => (
-            <div key={playlist.id} className="my-2">
-              <Link to={`/playlists/${playlist.id}`}>{playlist.name}</Link>{' '}
-              {/* Fixed path */}
-              <p>{playlist.songs.length} songs</p>
-            </div>
-          ))
+          playlists.map((playlist) => {
+            return (
+              <Link
+                key={playlist.id}
+                className={` relative border p-4 rounded-lg group ${theme === 'dark' ? 'text-secondary-text-light' : 'text-secondary-text-dim'}`}
+                style={{ backgroundColor: playlist.bgColor || '#6B7280' }}
+                to={`/playlists/${playlist.id}`}
+              >
+                <span className="font-bold">{playlist.name}</span>
+                <p>
+                  ({playlist.songs.length})
+                  {playlist.songs.length > 1 ? ' songs ' : ' song '}
+                </p>
+                <div className="absolute  left-46 top-8">
+                  <Button
+                    variant="default"
+                    size="icon"
+                    onClick={(e) => handleDeletePlaylist(e, playlist.id)}
+                    className={`cursor-pointer ${
+                      theme === 'dark'
+                        ? ' bg-secondary-text-dim text-secondary-text-light'
+                        : ' bg-white text-secondary-text-dim'
+                    }`}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              </Link>
+            );
+          })
         ) : (
           <p>No playlists yet. Create one above!</p>
         )}

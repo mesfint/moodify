@@ -11,13 +11,13 @@ const MoodCategories = ({ moods, onMoodSelect }: CategoriesProps) => {
   const { selectedMood, theme } = useMoodify();
 
   return (
-    <div className="flex gap-2 px-4 overflow-x-auto ">
+    <div className="flex gap-2 md:px-4  ">
       {moods.map((mood, index) => (
         <Button
           variant="default"
           key={index}
           onClick={() => onMoodSelect(mood)}
-          className={`  border-1 rounded-full shadow-md cursor-pointer flex-wrap px-4 py-2 ${selectedMood === mood ? 'bg-secondary-neutral-950 text-white underline' : 'bg-neutral-800'}  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+          className={`  border-1 rounded-full shadow-md cursor-pointer sm:text-l  ${selectedMood === mood ? 'bg-secondary-neutral-950 text-white underline' : 'bg-neutral-800'}  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
         >
           {mood}
         </Button>

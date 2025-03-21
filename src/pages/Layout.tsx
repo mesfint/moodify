@@ -39,9 +39,9 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div
-      className={`min-h-screen flex flex-col gap-2 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
+      className={`min-h-screen flex flex-col gap-2 overflow-x-hidden  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
     >
-      <div className="border">
+      <div className="border sticky top-0 z-20">
         <Header
           onLogOut={logout}
           accessToken={accessToken}
@@ -53,21 +53,19 @@ const Layout = ({ children }: LayoutProps) => {
       </div>
 
       <div className="flex gap-2 justify-between">
-        <div className="sticky border w-90 h-auto">
+        <div className="sticky top-0 border w-16 lg:w-56 h-screen">
           <Sidebar />
         </div>
 
-        <div className="flex flex-col gap-2 w-full">
-          {/* Categories : Only show on home route */}
-          <div className="border">
-            {location.pathname === '/' && (
+        <div className="flex flex-col gap-2 w-full ">
+          {/* Categories: Only render div on home route */}
+          {location.pathname === '/' && (
+            <div className="border  sticky top-16 z-10 pb-4 ">
               <MoodCategories moods={moods} onMoodSelect={setSelectedMood} />
-            )}
-          </div>
-          <div className="border">
-            <main className="mb-auto flex-1 overflow-y-auto pt-20 lg:pt-20">
-              {children || <Outlet />}
-            </main>
+            </div>
+          )}
+          <div className="border flex-1">
+            <main className="h-full">{children || <Outlet />}</main>
           </div>
         </div>
       </div>

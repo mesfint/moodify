@@ -5,12 +5,13 @@ import { fetchProfile, initiateLogin } from '../services/auth-service';
 import { Categories, SongItem } from '../types/moodify';
 import { UserProfile } from '../types/spotify';
 import { parseDurationToSeconds } from '../utils/convertToMMSS';
-import { getRandomSongs } from '../utils/random';
+import { getRandomBGcolors, getRandomSongs } from '../utils/random';
 
 interface Playlist {
   id: string;
   name: string;
   songs: SongItem[];
+  bgColor?: string;
 }
 
 interface MoodifyContextType {
@@ -41,6 +42,7 @@ interface MoodifyContextType {
   createPlaylist: (name: string) => void;
   addToPlayLists: (song: SongItem, playlistId: string) => void;
   removeFromPlayLists: (id: number, playlistId: string) => void;
+  deletePlaylist: (id: string) => void;
 }
 
 const defaultContext: MoodifyContextType = {
@@ -71,6 +73,7 @@ const defaultContext: MoodifyContextType = {
   createPlaylist: () => {},
   addToPlayLists: () => {},
   removeFromPlayLists: () => {},
+  deletePlaylist: () => {},
 };
 
 //create context
@@ -233,7 +236,24 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   };
 
   const createPlaylist = (name: string) => {
-    const newPlaylist = { id: Date.now().toString(), name, songs: [] };
+    const randomColor = getRandomBGcolors([
+      '#FF6F61',
+      '#6B7280',
+      '#FFD700',
+      '#4B0082',
+      '#00CED1',
+      '#FF1493',
+      '#32CD32',
+      '#FFA500',
+      '#4682B4',
+      '#8A2BE2',
+    ]);
+    const newPlaylist = {
+      id: Date.now().toString(),
+      name,
+      songs: [],
+      bgColor: randomColor,
+    };
     const updatedPlayLists = [newPlaylist, ...playlists];
     setPlaylists(updatedPlayLists);
     localStorage.setItem('playlists', JSON.stringify(updatedPlayLists));
@@ -250,6 +270,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     localStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
     notify(`Added ${song.title} to playlist`);
   };
+  // remove songs from playlists
   const removeFromPlayLists = (id: number, playlistId: string) => {
     const updatedPlaylists = playlists.map((playlist) =>
       playlist.id === playlistId
@@ -259,6 +280,12 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
           }
         : playlist
     );
+    setPlaylists(updatedPlaylists);
+    localStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
+  };
+  // remove playlists
+  const deletePlaylist = (id: string) => {
+    const updatedPlaylists = playlists.filter((playlist) => playlist.id !== id);
     setPlaylists(updatedPlaylists);
     localStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
   };
@@ -373,6 +400,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         createPlaylist,
         addToPlayLists,
         removeFromPlayLists,
+        deletePlaylist,
       }}
     >
       {children}
