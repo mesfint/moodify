@@ -15,7 +15,7 @@ const Footer = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {/* Branding Section */}
           <div className="flex flex-col gap-4">
             <h3 className="text-2xl font-bold">Moodify</h3>
@@ -62,6 +62,7 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
+            <div className="md:hidden border-b-1 w-16"></div>
           </div>
 
           {/* Social Links */}
@@ -106,7 +107,7 @@ const Footer = () => {
           {/* Contact/Support */}
           <div className="flex flex-col gap-4">
             <h4 className="text-lg font-semibold">Contact</h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2 ">
               <li>
                 <a
                   href="https://mesfin-zeta.vercel.app/"

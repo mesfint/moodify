@@ -1,42 +1,39 @@
 import axios from 'axios';
 import qs from 'qs';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMoodify } from '../hooks/useMoodify';
+import { fetchProfile } from '../services/auth-service';
 
 const Callback: React.FC = () => {
   const navigate = useNavigate();
+  const { setAccessToken, setProfile } = useMoodify();
 
   const handleCallback = async () => {
-    console.log('Handling callback...');
-
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
 
     if (!code) {
-      console.error('Authorization code not found in URL.');
+      console.error('No code in URL');
+      navigate('/');
       return;
     }
-
-    console.log('Authorization code found:', code);
 
     const codeVerifier = localStorage.getItem('code_verifier');
 
     if (!codeVerifier) {
-      console.error('Code verifier not found in localStorage.');
+      console.error('No code_verifier in localStorage');
+      navigate('/');
       return;
     }
-
-    console.log('Code verifier found:', codeVerifier);
 
     const payload = {
       grant_type: 'authorization_code',
       code,
-      redirect_uri: 'http://localhost:5173/callback', // Match your redirect URI
-      client_id: '744fccda3a6d417184998410733cb884', // Replace with your Spotify Client ID
+      redirect_uri: 'http://localhost:5173/callback',
+      client_id: '744fccda3a6d417184998410733cb884',
       code_verifier: codeVerifier,
     };
-
-    console.log('Payload for token exchange:', payload);
 
     try {
       const response = await axios.post(
@@ -49,17 +46,21 @@ const Callback: React.FC = () => {
         }
       );
 
-      console.log('Token exchange response:', response.data);
-
       const { access_token } = response.data;
-      localStorage.setItem('access_token', access_token); // Store the access token
-      localStorage.setItem('code_verifier', codeVerifier); // Store the code verifier
-      console.log('Access Token Stored:', access_token);
-      console.log('Code Verifier Stored:', codeVerifier);
+      localStorage.setItem('access_token', access_token);
+      setAccessToken(access_token);
 
-      navigate('/'); // Redirect to the root route
+      const profileData = await fetchProfile(access_token);
+      setProfile(profileData);
+
+      navigate('/');
     } catch (error) {
-      console.error('Error exchanging code for tokens:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Token exchange failed:', error.response?.data);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+      navigate('/');
     }
   };
 

@@ -16,7 +16,6 @@ interface SpotifyAuthProps {
 const Header = ({
   onLogOut,
   accessToken,
-  profile,
   onLogin,
   title,
   subtitle,
@@ -24,7 +23,8 @@ const Header = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const ButtonIcon = isExpanded ? ChevronUp : ChevronDown;
 
-  const { theme, toggleTheme } = useMoodify();
+  const { theme, toggleTheme, profile } = useMoodify();
+  console.log('Header rendering with profile:', profile);
 
   return (
     <header
@@ -76,7 +76,7 @@ const Header = ({
         >
           {theme === 'dark' ? <Sun /> : <Moon />}
         </Button>
-        {!accessToken ? (
+        {/* {!accessToken ? (
           <Button
             onClick={onLogin}
             className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}   border-1 rounded-full px-4 py-2 text-sm`}
@@ -89,11 +89,16 @@ const Header = ({
               className={` w-12 h-12 flex items-center justify-center rounded-full `}
               onClick={() => setIsExpanded((prev) => !prev)}
             >
-              <img
-                src={profile?.images[0]?.url}
-                alt={profile?.display_name}
-                className="w-8 h-8 rounded-full "
-              />
+              {profile ? (
+                <img
+                  src={profile.images?.[0]?.url || 'default-avatar.png'}
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gray-300" />
+              )}
+              <span>{profile?.display_name || 'Guest'}</span>
               <ButtonIcon className="w-5 h-5 text-secondary-text-light ml-1" />
             </div>
             {isExpanded && (
@@ -121,7 +126,7 @@ const Header = ({
               </div>
             )}
           </div>
-        )}
+        )} */}
       </div>
     </header>
   );

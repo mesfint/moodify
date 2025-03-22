@@ -10,7 +10,7 @@ const Sidebar = () => {
     <>
       {/* Small Screen Sidebar (Icons Only) */}
       <aside
-        className={`sticky top-0   pb-4 flex flex-col items-center gap-4 lg:hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
+        className={`fixed top-26 bottom-0 w-16 flex flex-col items-center gap-4 lg:hidden overflow-y-auto scrollbar-hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
       >
         <NavLink to="/" end className="flex items-center py-1">
           <Button variant="ghost" size="icon">
@@ -31,7 +31,7 @@ const Sidebar = () => {
 
       {/* Large Screen Sidebar */}
       <aside
-        className={`hidden lg:flex  h-auto sticky top-0  scrollbar-hidden flex-col gap-2 px-2 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
+        className={`hidden lg:flex fixed top-26 bottom-0 w-56 flex-col gap-2 px-2 overflow-y-auto scrollbar-hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
       >
         <nav role="navigation" className="flex flex-col gap-2">
           <NavLink

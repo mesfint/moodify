@@ -40,9 +40,9 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div
-      className={`min-h-screen flex flex-col gap-2 overflow-x-hidden  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
+      className={`min-h-scree flex flex-col gap-2 overflow-x-hidden  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
     >
-      <div className=" sticky top-0 z-20">
+      <div className="fixed top-0 left-0 right-0 z-30 h-18">
         <Header
           onLogOut={logout}
           accessToken={accessToken}
@@ -53,15 +53,15 @@ const Layout = ({ children }: LayoutProps) => {
         />
       </div>
 
-      <div className="flex gap-2 justify-between">
-        <div className="sticky top-0  w-16 lg:w-56 h-screen">
+      <div className="flex flex-1 mt-35 overflow-hidden">
+        <div className="  w-16 lg:w-56 h-screen">
           <Sidebar />
         </div>
 
         <div className="flex flex-col gap-2 w-full ">
           {/* Categories: Only render div on home route */}
           {location.pathname === '/' && (
-            <div className="  sticky top-16 z-10 pb-4 ">
+            <div className="  fixed top-20  z-30  ">
               <MoodCategories moods={moods} onMoodSelect={setSelectedMood} />
             </div>
           )}
@@ -70,8 +70,9 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
         </div>
       </div>
-
-      <Footer />
+      <div className=" bottom-0 left-16 lg:left-56 right-0 z-10">
+        <Footer />
+      </div>
     </div>
   );
 };

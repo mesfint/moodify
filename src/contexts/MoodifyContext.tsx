@@ -16,12 +16,14 @@ interface Playlist {
 
 interface MoodifyContextType {
   profile: UserProfile | null;
+  setProfile: () => void;
   songs: SongItem[];
   favourites: SongItem[];
   moods: Categories[];
   selectedMood: Categories;
   thumbnailSongs: SongItem[];
   accessToken: string | null;
+  setAccessToken: (token: string | null) => void;
   currentSong: SongItem | null;
   isPlaying: boolean;
   volume: number;
@@ -47,12 +49,14 @@ interface MoodifyContextType {
 
 const defaultContext: MoodifyContextType = {
   profile: null,
+  setProfile: () => {},
   songs: [],
   favourites: [],
   moods: [],
   selectedMood: 'All',
   thumbnailSongs: [],
   accessToken: null,
+  setAccessToken: () => {},
   currentSong: null,
   isPlaying: false,
   volume: 1,
@@ -117,21 +121,37 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   const audioRef = useRef<HTMLAudioElement>(new Audio()); //avoids <audio></audio>
   const navigate = useNavigate();
 
+  // Fetch profile when accessToken changes
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      setAccessToken(token);
-      const fetchAndSetProfile = async () => {
+    const fetchAndSetProfile = async () => {
+      const token = localStorage.getItem('access_token');
+      if (token && !profile) {
+        console.log('Fetching profile with token:', token);
+
+        // Only fetch if we don’t already have a profile
         try {
+          setAccessToken(token);
           const profileData = await fetchProfile(token);
+          console.log('Profile set:', profileData);
           setProfile(profileData);
+          navigate('/');
         } catch (error) {
           console.error('Error fetching profile:', error);
+          setAccessToken(null);
+          localStorage.removeItem('access_token');
         }
-      };
-      fetchAndSetProfile();
-    }
-  }, []);
+      }
+    };
+    fetchAndSetProfile();
+  }, [accessToken]);
+
+  useEffect(() => {
+    console.log('accessToken changed:', accessToken);
+  }, [accessToken]);
+
+  useEffect(() => {
+    console.log('profile changed:', profile);
+  }, [profile]);
 
   // useEffect(() => {
   //   const filteredSongs =
@@ -374,6 +394,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     <MoodifyContext.Provider
       value={{
         profile,
+        setProfile,
         songs,
         favourites,
         moods,
