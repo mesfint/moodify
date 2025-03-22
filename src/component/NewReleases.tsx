@@ -5,11 +5,11 @@ import {
   Heart,
   Pause,
   Play,
-  Plus,
   Volume2,
   VolumeOff,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMoodify } from '../hooks/useMoodify';
 import { SongItem } from '../types/moodify';
 import { formatTime } from '../utils/formatTime';
@@ -36,6 +36,9 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
     playlists,
   } = useMoodify();
   const [selectedPlaylistId, setSelectedPlaylistId] = useState<string>('');
+  const [expandedSongId, setExpandedSongId] = useState<number | null>(null);
+
+  const navigate = useNavigate();
 
   const handlePrev = () => {
     const currentIndex = thumbnailSongs.findIndex(
@@ -58,18 +61,19 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
     setVolume(volume === 1 ? 0 : 1);
   };
 
-  const handleAddToPlaylist = () => {
-    if (currentSong && selectedPlaylistId) {
-      addToPlayLists(currentSong, selectedPlaylistId);
-      setSelectedPlaylistId('');
-    }
+  const handleAddToPlaylist = (song: SongItem, playlistId: string) => {
+    addToPlayLists(song, playlistId);
+    setExpandedSongId(null);
   };
 
   return (
     <div className="flex flex-col gap-4 mx-4 h-full">
       <div className="top-24 z-10">
         {currentSong ? (
-          <div className="flex w-full  ">
+          <div
+            className="flex w-full cursor-pointer"
+            onClick={() => navigate(`/songs/${currentSong.id}`)}
+          >
             <img
               src={currentSong.thumbnailUrl || '...'}
               alt={currentSong.title}
@@ -78,27 +82,6 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             <div className="hidden md:block w-1/2 bg-gradient-to-r from-secondary-text-light via-secondary-text-dim to-secondary-dark p-6">
               <p className="text-white">{currentSong.title}</p>
               <h3 className="font-bold text-white">{currentSong.artist}</h3>
-              <select
-                value={selectedPlaylistId}
-                onChange={(e) => setSelectedPlaylistId(e.target.value)}
-                className="p-2 rounded bg-secondary-dark text-white"
-              >
-                <option value="">Select a playlist</option>
-                {playlists.map((playlist) => (
-                  <option key={playlist.id} value={playlist.id}>
-                    {playlist.name}
-                  </option>
-                ))}
-              </select>
-              <Button
-                variant="default"
-                size="medium"
-                onClick={handleAddToPlaylist}
-                disabled={!selectedPlaylistId || !currentSong}
-              >
-                <Plus />
-                <span>Add to Playlist</span>
-              </Button>
             </div>
           </div>
         ) : (
@@ -132,7 +115,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             variant="default"
             size="icon"
             onClick={handlePrev}
-            className={`border-1  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={`  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             <ChevronLeft />
           </Button>
@@ -140,7 +123,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             variant="default"
             size="icon"
             onClick={togglePlayPause}
-            className={`border-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             {isPlaying ? <Pause /> : <Play />}
           </Button>
@@ -148,12 +131,14 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             variant="default"
             size="icon"
             onClick={handleNext}
-            className={` border-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={`  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             <ChevronRight />
           </Button>
         </div>
-        <div className="text-white">
+        <div
+          className={`  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+        >
           {isPlaying
             ? formatTime(currentTime)
             : currentSong?.duration || '0:00'}
@@ -164,7 +149,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             size="icon"
             onClick={handleVolume}
             tooltip={volume ? 'Mute' : 'Unmute'}
-            className={`border-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             {volume ? <Volume2 /> : <VolumeOff />}
           </Button>
@@ -174,17 +159,17 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             onClick={() => currentSong && onAddFavourite(currentSong)}
             tooltip="Add to Favorites"
             disabled={!currentSong}
-            className={`border-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             <Heart />
           </Button>
-          <Button
+          {/* <Button
             variant="default"
             size="icon"
             className={`border-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'} `}
           >
             <EllipsisVertical />
-          </Button>
+          </Button> */}
         </div>
       </div>
       {/* Song Card */}
@@ -192,13 +177,51 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
         {songs.map((song) => (
           <div
             key={song.id}
-            className={`relative rounded-t-lg overflow-hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'} group`}
+            className={` rounded-t-lg overflow-hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'} group`}
           >
-            <img
-              src={song.thumbnailUrl}
-              alt={song.title}
-              className="w-full h-40 object-cover "
-            />
+            <div className="relative">
+              <Button
+                className={`absolute bg-transparent top-2  right-2  flex items-center justify-center border-1 ${theme === 'dark' ? 'border-white ' : ' border-black '} rounded-full md:w-12 md:h-12 w-8 h-8  cursor-pointer`}
+                onClick={() =>
+                  setExpandedSongId(expandedSongId === song.id ? null : song.id)
+                }
+              >
+                <EllipsisVertical
+                  size={32}
+                  fill={` ${theme === 'dark' ? 'border-white ' : ' border-black '}`}
+                />
+              </Button>
+
+              <img
+                src={song.thumbnailUrl}
+                alt={song.title}
+                className="w-full h-40 object-cover "
+              />
+
+              {expandedSongId === song.id && (
+                <div
+                  className={`absolute right-0 top-10 mt-2 w-40 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}  shadow-lg z-20`}
+                >
+                  <ul className="py-2">
+                    <p className="py-2 px-4 text-sm">Add to playlist</p>
+                    {playlists.length > 0 ? (
+                      playlists.map((playlist) => (
+                        <li
+                          key={playlist.id}
+                          className="px-4 py-2 hover:bg-secondary-dark-hover cursor-pointer"
+                          onClick={() => handleAddToPlaylist(song, playlist.id)}
+                        >
+                          {playlist.name}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="px-4 py-2 text-gray-500">No playlists</li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
+
             <div
               className={`p-2  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dark'}  transition-colors duration-300 group-hover:bg-secondary-text-dim`}
             >

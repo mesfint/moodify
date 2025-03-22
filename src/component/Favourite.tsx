@@ -75,7 +75,7 @@ const Favourite = () => {
         </form>
       </div>
 
-      <table className="w-full text-left">
+      <table className="w-full text-left table-fixed">
         <thead>
           <tr
             className={
@@ -102,20 +102,11 @@ const Favourite = () => {
               </Button>
               Artist
             </th>
-            <th className="px-2">Title</th>
-            <th className="px-2">Play/Pause</th>
-            <th className="px-2">Delete</th>
-            <th className="px-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                tooltip="duration"
-                className={
-                  theme === 'dark'
-                    ? 'text-secondary-text-light'
-                    : 'text-secondary-text-dim'
-                }
-              >
+            <th className="w-1/4 px-2">Title</th>
+            <th className="w-12 px-2">Play</th>
+            <th className="w-12 px-2">Delete</th>
+            <th className="w-16 px-2">
+              <Button variant="ghost" size="icon" tooltip="duration">
                 <Clock />
               </Button>
             </th>
@@ -179,10 +170,12 @@ const Favourite = () => {
                     <Trash2 />
                   </Button>
                 </td>
-                <td>
-                  {currentSong?.id === fav.id && isPlaying
-                    ? formatTime(currentTime)
-                    : fav.duration}
+                <td className="text-center">
+                  <span className="inline-block w-12 text-center">
+                    {currentSong?.id === fav.id && isPlaying
+                      ? formatTime(currentTime)
+                      : fav.duration}
+                  </span>
                 </td>
               </tr>
             ))

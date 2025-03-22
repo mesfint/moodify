@@ -11,7 +11,7 @@ const MoodCategories = ({ moods, onMoodSelect }: CategoriesProps) => {
   const { selectedMood, theme } = useMoodify();
 
   return (
-    <div className="flex gap-2 md:px-4  ">
+    <div className="flex gap-2 md:px-4   ">
       {moods.map((mood, index) => (
         <Button
           variant="default"

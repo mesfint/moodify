@@ -67,12 +67,13 @@ const Playlists = () => {
             {selectedPlaylist.songs.length > 0 ? (
               selectedPlaylist.songs.map((song, index: number) => (
                 <tr
-                  className={`  ${
-                    theme === 'dark'
-                      ? 'hover:bg-secondary-text-dim text-secondary-text-light'
-                      : 'hover:bg-secondary-text-light text-secondary-text-dim'
-                  }`}
-                  key={song.id}
+                  className={
+                    currentSong?.id === song.id && isPlaying
+                      ? 'bg-secondary-text-dim'
+                      : theme === 'dark'
+                        ? 'text-secondary-text-light'
+                        : 'text-secondary-text-dim'
+                  }
                 >
                   <div className="flex gap-2 mb-2">
                     <td className="text-md text-center mx-2">{index + 1}</td>
@@ -121,10 +122,12 @@ const Playlists = () => {
                     </Button>
                   </td>
 
-                  <td>
-                    {currentSong?.id === song.id && isPlaying
-                      ? formatTime(currentTime)
-                      : song.duration}
+                  <td className="text-center">
+                    <span className="inline-block w-12 text-center">
+                      {currentSong?.id === song.id && isPlaying
+                        ? formatTime(currentTime)
+                        : song.duration}
+                    </span>
                   </td>
                 </tr>
               ))
