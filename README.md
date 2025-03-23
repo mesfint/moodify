@@ -8,7 +8,7 @@ This project was a journey of growth—learning to manipulate native audio contr
 ### Features
 
 - Mood-Based Playlists: Filter songs by mood categories (e.g., "Happy," "Chill").
-- Mood-Based Playlists: Filter songs by mood categories (e.g., "Happy," "Chill").
+- Favorites & Playlists: Add songs to favorites or custom playlists, stored in localStorage.
 - Audio Playback: Play, pause, and control volume with a custom player using `useRef` for native audio manipulation.
 - Responsive Design: Fully responsive layout optimized for mobile, tablet, and desktop.
 - Dark/Light Mode: Toggle between themes, persisted in `localStorage`
