@@ -127,7 +127,9 @@ const CurrentSong = () => {
             <ChevronRight />
           </Button>
         </div>
-        <div className="text-white">
+        <div
+          className={`p-2  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dark'}  transition-colors duration-300 group-hover:bg-secondary-text-dim`}
+        >
           {isPlaying
             ? formatTime(currentTime)
             : currentSong?.duration || '0:00'}

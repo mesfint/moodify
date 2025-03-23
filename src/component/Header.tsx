@@ -57,7 +57,7 @@ const Header = ({ title, subtitle }: SpotifyAuthProps) => {
           variant="default"
           size="icon"
           className={`${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
-          onClick={toggleTheme}
+          onClick={() => toggleTheme(theme)}
         >
           {theme === 'dark' ? <Sun /> : <Moon />}
         </Button>

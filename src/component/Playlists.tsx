@@ -18,7 +18,6 @@ const Playlists = () => {
     currentSong,
     playSong,
     pauseSong,
-    notification,
   } = useMoodify();
   const [playlistName, setPlaylistName] = useState('');
   const { playlistId } = useParams();

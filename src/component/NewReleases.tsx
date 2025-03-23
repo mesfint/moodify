@@ -192,7 +192,11 @@ const NewReleases = ({ songs }: NewRelasesProps) => {
               <img
                 src={song.thumbnailUrl}
                 alt={song.title}
-                className="w-full h-40 object-cover "
+                className={`w-full h-40 object-cover ${
+                  song.id === currentSong?.id && isPlaying
+                    ? 'border border-green-500'
+                    : ''
+                }`}
               />
 
               {expandedSongId === song.id && (

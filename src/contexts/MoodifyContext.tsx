@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Moods, songData } from '../data/songs';
 import { Categories, SongItem } from '../types/moodify';
 import { parseDurationToSeconds } from '../utils/convertToMMSS';
@@ -102,7 +101,6 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
   );
   const audioRef = useRef<HTMLAudioElement>(new Audio()); //avoids <audio></audio>
-  const navigate = useNavigate();
 
   useEffect(() => {
     const filteredSongs =
@@ -130,39 +128,63 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     }
   }, [selectedMood, songs]);
 
-  //Time Countdown Effect
+  //Time Countdown & song completion Effect
   useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
     if (isPlaying && volume && currentSong) {
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         if (audioRef.current && !isNaN(audioRef.current.duration)) {
-          setCurrentTime(
-            Math.floor(audioRef.current.duration - audioRef.current.currentTime)
+          const remainingTime = Math.floor(
+            audioRef.current.duration - audioRef.current.currentTime
           );
+          setCurrentTime(remainingTime);
+
+          // Check if song has ended
+          if (remainingTime <= 0) {
+            handleSongEnd();
+          }
         }
       }, 1000);
-      return () => clearInterval(interval);
-    } // Only loop when current song ends
-    if (isPlaying && currentTime === 0 && currentSong) {
-      const currentIndex = favourites.findIndex((s) => s.id === currentSong.id);
-      if (currentIndex !== -1) {
-        const newIndex =
-          currentIndex < favourites.length - 1 ? currentIndex + 1 : 0;
-        playSong(favourites[newIndex]);
-      } else {
-        const currentThumbIndex = thumbnailSongs.findIndex(
-          (s) => s.id === currentSong.id
-        );
-        if (currentThumbIndex !== -1) {
-          const newThumbIndex =
-            currentThumbIndex < thumbnailSongs.length - 1
-              ? currentThumbIndex + 1
-              : 0;
-          playSong(thumbnailSongs[newThumbIndex]);
-        }
-      }
     }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isPlaying, volume, currentSong, favourites, thumbnailSongs]);
 
+  // Handle song ending
+  const handleSongEnd = () => {
+    if (!currentSong) return;
+
+    // Looping(continous sing) favourites songs
+    const currentIndex = favourites.findIndex((s) => s.id === currentSong.id);
+    if (currentIndex !== -1 && favourites.length > 1) {
+      const newIndex =
+        currentIndex < favourites.length - 1 ? currentIndex + 1 : 0;
+      playSong(favourites[newIndex]);
+      return;
+    }
+
+    //  thumbnailSongs Loop
+    const currentThumbIndex = thumbnailSongs.findIndex(
+      (s) => s.id === currentSong.id
+    );
+    if (currentThumbIndex !== -1 && thumbnailSongs.length > 1) {
+      const newThumbIndex =
+        currentThumbIndex < thumbnailSongs.length - 1
+          ? currentThumbIndex + 1
+          : 0;
+      playSong(thumbnailSongs[newThumbIndex]);
+      return;
+    }
+
+    // No next song: reset current song to start
+    setIsPlaying(false);
+    setCurrentTime(parseDurationToSeconds(currentSong.duration));
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0; // Reset to start
+    }
+  };
   const notify = (message: string) => {
     setNotification({ message, visible: true });
     setTimeout(() => setNotification({ message: '', visible: false }), 2300);
