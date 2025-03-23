@@ -12,8 +12,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { logout, accessToken, profile, login, theme, moods, setSelectedMood } =
-    useMoodify(); // Add moods, setSelectedMood
+  const { theme, moods, setSelectedMood } = useMoodify();
   const location = useLocation();
 
   const getHeaderContent = () => {
@@ -43,14 +42,7 @@ const Layout = ({ children }: LayoutProps) => {
       className={`min-h-scree flex flex-col gap-2 overflow-x-hidden  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
     >
       <div className="fixed top-0 left-0 right-0 z-30 h-18">
-        <Header
-          onLogOut={logout}
-          accessToken={accessToken}
-          profile={profile}
-          onLogin={login}
-          title={title}
-          subtitle={subtitle}
-        />
+        <Header title={title} subtitle={subtitle} />
       </div>
 
       <div className="flex flex-1 mt-35 overflow-hidden">

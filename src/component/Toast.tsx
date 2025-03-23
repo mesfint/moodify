@@ -5,7 +5,7 @@ const Toast = () => {
 
   return (
     <div
-      className={`fixed top-4 right-4 bg-green-700 text-white p-3 rounded-lg shadow-md transition-opacity duration-300 ${
+      className={`top-4 right-4 text-center bg-green-800 text-white p-6 rounded-lg shadow-md transition-opacity duration-300 ${
         notification.visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
       style={{ display: notification.visible ? 'block' : 'none' }}

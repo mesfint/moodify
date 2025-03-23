@@ -53,7 +53,7 @@ const Playlists = () => {
 
   if (playlistId && selectedPlaylist) {
     return (
-      <div className="flex flex-col">
+      <div className="flex flex-col ">
         <h2 className="mx-10 py-2">{selectedPlaylist.name}</h2>
         <table className="w-full">
           <thead>
@@ -154,7 +154,7 @@ const Playlists = () => {
 
   return (
     <div className="flex flex-col gap-4 h-full">
-      <h2 className="text-xl font-bold">Create Playlists</h2>
+      <h2 className="text-xl font-bold px-2">Create Playlists</h2>
       <form onSubmit={handleSubmit} className="relative w-full md:w-64 flex">
         <PenLine
           size={20}

@@ -10,6 +10,7 @@ import Layout from './pages/Layout';
 const App = () => {
   return (
     <Layout>
+      <Toast />
       <Routes>
         <Route index element={<Home />} />
         <Route path="/favourite" element={<Favourite />} />
@@ -18,7 +19,6 @@ const App = () => {
         <Route path="/songs/:id" element={<CurrentSong />} />
         <Route path="/callback" element={<Callback />} />
       </Routes>
-      <Toast />
     </Layout>
   );
 };

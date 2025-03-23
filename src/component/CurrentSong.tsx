@@ -1,4 +1,3 @@
-// CurrentSong.tsx
 import {
   ChevronLeft,
   ChevronRight,

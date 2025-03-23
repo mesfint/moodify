@@ -2,7 +2,7 @@ import NewReleases from '../component/NewReleases';
 import { useMoodify } from '../hooks/useMoodify';
 
 const Home = () => {
-  const { theme, songs, addToFavorites, selectedMood } = useMoodify();
+  const { theme, songs, selectedMood } = useMoodify();
   const filteredSongs =
     selectedMood === 'All'
       ? songs
@@ -12,7 +12,7 @@ const Home = () => {
     <div
       className={`flex flex-col flex-1 gap-4 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
     >
-      <NewReleases songs={filteredSongs} onAddFavourite={addToFavorites} />
+      <NewReleases songs={filteredSongs} />
     </div>
   );
 };

@@ -187,8 +187,10 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
 
   const removeFromFavorites = (id: number) => {
     const updatedFavourites = favourites.filter((fav) => fav.id !== id);
+
     setFavourites(updatedFavourites);
     localStorage.setItem('favSongs', JSON.stringify(updatedFavourites));
+    notify('Removed a song from your Favourites');
   };
 
   const createPlaylist = (name: string) => {
@@ -238,12 +240,14 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     );
     setPlaylists(updatedPlaylists);
     localStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
+    notify('Removed a song from your Playlist');
   };
   // remove playlists
   const deletePlaylist = (id: string) => {
     const updatedPlaylists = playlists.filter((playlist) => playlist.id !== id);
     setPlaylists(updatedPlaylists);
     localStorage.setItem('playlists', JSON.stringify(updatedPlaylists));
+    notify(`Removed a playlist`);
   };
 
   const playSong = (song: SongItem) => {

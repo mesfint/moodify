@@ -17,11 +17,11 @@ import { Button } from './Button';
 
 interface NewRelasesProps {
   songs: SongItem[];
-  onAddFavourite: (song: SongItem) => void;
-  addToPlayLists: (song: SongItem, playlistId: string) => void;
+  //onAddFavourites: (song: SongItem) => void;
+  //addToPlayLists: (song: SongItem, playlistId: string) => void;
 }
 
-const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
+const NewReleases = ({ songs }: NewRelasesProps) => {
   const {
     currentSong,
     isPlaying,
@@ -34,8 +34,9 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
     theme,
     addToPlayLists,
     playlists,
+    addToFavorites,
   } = useMoodify();
-  const [selectedPlaylistId, setSelectedPlaylistId] = useState<string>('');
+  // const [selectedPlaylistId, setSelectedPlaylistId] = useState<string>('');
   const [expandedSongId, setExpandedSongId] = useState<number | null>(null);
 
   const navigate = useNavigate();
@@ -64,6 +65,9 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
   const handleAddToPlaylist = (song: SongItem, playlistId: string) => {
     addToPlayLists(song, playlistId);
     setExpandedSongId(null);
+  };
+  const handleAddToFavorites = (song: SongItem) => {
+    addToFavorites(song);
   };
 
   return (
@@ -156,7 +160,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
           <Button
             variant="default"
             size="icon"
-            onClick={() => currentSong && onAddFavourite(currentSong)}
+            onClick={() => currentSong && handleAddToFavorites(currentSong)}
             tooltip="Add to Favorites"
             disabled={!currentSong}
             className={`border cursor-pointer ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}

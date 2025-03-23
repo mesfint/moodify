@@ -1,12 +1,11 @@
 // Footer.tsx
 import { Book, Github, Link2, Linkedin } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useMoodify } from '../hooks/useMoodify';
 import { Button } from './Button';
 
 const Footer = () => {
   const { theme } = useMoodify();
-  const navigate = useNavigate();
 
   return (
     <footer
