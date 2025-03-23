@@ -31,7 +31,7 @@ const Sidebar = () => {
 
       {/* Large Screen Sidebar */}
       <aside
-        className={`hidden lg:flex fixed top-26 bottom-0 w-56  flex-col gap-2 px-2 overflow-y-auto scrollbar-hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
+        className={`hidden lg:flex fixed top-26 bottom-0 w-50  flex-col gap-2 px-2 overflow-y-auto scrollbar-hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
       >
         <nav role="navigation" className="flex flex-col gap-2">
           <NavLink
