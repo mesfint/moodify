@@ -109,6 +109,6 @@ pnpm run  dev
 
 ### Demo
 
-[Moodify](https://moodify-bwhv22jq8-mesfints-projects.vercel.app/)
+[Moodify](https://moodify-drab.vercel.app/)
 
 ![screep-copy](moodify-screen.png)
