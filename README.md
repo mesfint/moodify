@@ -19,7 +19,7 @@ This project was a journey of growth—learning to manipulate native audio contr
 
 - TypeScript: Used for type-safe coding, enhancing my TS skills throughout the project.
 
-- React: Built with React for a component-based UI, leveraging hooks like `useState, useEffect, and useRe`.
+- React: Built with React for a component-based UI, leveraging hooks like `useState, useEffect, and useRef`.
 
 - React Context: Centralized state management for songs, playback, and user preferences.
 
@@ -88,8 +88,8 @@ This project uses Vite for development and PNPM for package management. Follow t
 1.  Clone the Reposiory:
 
 ```bash
-git clone https://github.com/your-username/moodify.git
-cd moodif
+git clone https://github.com/mesfint/moodify.git
+cd moodify
 ```
 
 2.  Install Dependencies:
