@@ -106,3 +106,7 @@ pnpm run  dev
 ```
 
 - Opens at http://localhost:5173 (default Vite port).
+
+### Demo
+
+[Moodify](https://moodify-bwhv22jq8-mesfints-projects.vercel.app/)
