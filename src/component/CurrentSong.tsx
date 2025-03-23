@@ -48,7 +48,7 @@ const CurrentSong = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 mx-4 h-full">
+    <div className="flex flex-col gap-4 mx-4  h-full">
       <div className="top-24 z-10">
         {currentSong ? (
           <div className="flex w-full">

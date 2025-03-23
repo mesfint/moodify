@@ -143,7 +143,9 @@ const Playlists = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={3}>No songs yet</td>
+                <td className="px-10" colSpan={3}>
+                  No songs yet
+                </td>
               </tr>
             )}
           </tbody>
@@ -153,8 +155,8 @@ const Playlists = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 h-full">
-      <h2 className="text-xl font-bold px-2">Create Playlists</h2>
+    <div className="flex flex-col gap-4 h-full ml-10">
+      <h2 className="text-xl font-bold ">Create Playlists</h2>
       <form onSubmit={handleSubmit} className="relative w-full md:w-64 flex">
         <PenLine
           size={20}
@@ -195,12 +197,12 @@ const Playlists = () => {
                   ({playlist.songs.length})
                   {playlist.songs.length > 1 ? ' songs ' : ' song '}
                 </p>
-                <div className="absolute  left-46 top-8">
+                <div className=" relative  ">
                   <Button
                     variant="default"
                     size="icon"
                     onClick={(e) => handleDeletePlaylist(e, playlist.id)}
-                    className={`cursor-pointer ${
+                    className={`absolute right-0 -top-10 cursor-pointer  ${
                       theme === 'dark'
                         ? ' bg-secondary-text-dim text-secondary-text-light'
                         : ' bg-white text-secondary-text-dim'

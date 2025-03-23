@@ -192,11 +192,11 @@ const Favourite = () => {
             <tr>
               <td
                 colSpan={6}
-                className={
+                className={` px-8 ${
                   theme === 'dark'
                     ? 'text-secondary-text-light'
                     : 'text-secondary-text-dim'
-                }
+                }`}
               >
                 {' '}
                 {/* Added theme */}
