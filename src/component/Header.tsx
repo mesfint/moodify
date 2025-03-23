@@ -1,5 +1,4 @@
-import { ChevronDown, ChevronUp, Circle, Moon, Sun } from 'lucide-react';
-import { useState } from 'react';
+import { Circle, Moon, Sun } from 'lucide-react';
 import { useMoodify } from '../hooks/useMoodify';
 import { UserProfile } from '../types/spotify';
 import { Button } from './Button';
@@ -13,18 +12,8 @@ interface SpotifyAuthProps {
   subtitle?: string;
 }
 
-const Header = ({
-  onLogOut,
-  accessToken,
-  onLogin,
-  title,
-  subtitle,
-}: SpotifyAuthProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const ButtonIcon = isExpanded ? ChevronUp : ChevronDown;
-
-  const { theme, toggleTheme, profile } = useMoodify();
-  console.log('Header rendering with profile:', profile);
+const Header = ({ title, subtitle }: SpotifyAuthProps) => {
+  const { theme, toggleTheme } = useMoodify();
 
   return (
     <header
@@ -66,7 +55,6 @@ const Header = ({
         <h3 className="text-white font-display font-bold text-lg">Moodify</h3>
       </div> */}
 
-      {/* Auth Section */}
       <div className="flex items-center gap-4 mx-4">
         <Button
           variant="default"
@@ -76,57 +64,6 @@ const Header = ({
         >
           {theme === 'dark' ? <Sun /> : <Moon />}
         </Button>
-        {/* {!accessToken ? (
-          <Button
-            onClick={onLogin}
-            className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}   border-1 rounded-full px-4 py-2 text-sm`}
-          >
-            Login with Spotify
-          </Button>
-        ) : (
-          <div className="relative flex items-center">
-            <div
-              className={` w-12 h-12 flex items-center justify-center rounded-full `}
-              onClick={() => setIsExpanded((prev) => !prev)}
-            >
-              {profile ? (
-                <img
-                  src={profile.images?.[0]?.url || 'default-avatar.png'}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-gray-300" />
-              )}
-              <span>{profile?.display_name || 'Guest'}</span>
-              <ButtonIcon className="w-5 h-5 text-secondary-text-light ml-1" />
-            </div>
-            {isExpanded && (
-              <div
-                className={`absolute right-0 top-full mt-2 w-48 ${theme === 'dark' ? 'bg-secondary-text-dim text-secondary-text-light' : ' bg-white text-secondary-text-dim'} border-1  rounded-lg shadow-lg z-10`}
-              >
-                <ul className="py-2">
-                  <li>
-                    <a
-                      href="/dashboard"
-                      className="block px-4 py-2 text-sm text-secondary-text-light hover:bg-secondary-dark-hover cursor-pointer"
-                    >
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <button
-                      onClick={onLogOut}
-                      className="block w-full text-left px-4 py-2 text-sm text-secondary-text-light hover:bg-secondary-dark-hover cursor-pointer"
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
-        )} */}
       </div>
     </header>
   );

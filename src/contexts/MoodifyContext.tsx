@@ -1,9 +1,7 @@
 import { createContext, ReactNode, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Moods, songData } from '../data/songs';
-import { fetchProfile, initiateLogin } from '../services/auth-service';
 import { Categories, SongItem } from '../types/moodify';
-import { UserProfile } from '../types/spotify';
 import { parseDurationToSeconds } from '../utils/convertToMMSS';
 import { getRandomBGcolors, getRandomSongs } from '../utils/random';
 
@@ -15,15 +13,11 @@ interface Playlist {
 }
 
 interface MoodifyContextType {
-  profile: UserProfile | null;
-  setProfile: () => void;
   songs: SongItem[];
   favourites: SongItem[];
   moods: Categories[];
   selectedMood: Categories;
   thumbnailSongs: SongItem[];
-  accessToken: string | null;
-  setAccessToken: (token: string | null) => void;
   currentSong: SongItem | null;
   isPlaying: boolean;
   volume: number;
@@ -32,8 +26,6 @@ interface MoodifyContextType {
   addToFavorites: (song: SongItem) => void;
   removeFromFavorites: (id: number) => void;
   setSelectedMood: (mood: Categories) => void;
-  logout: () => void;
-  login: () => void;
   playSong: (song: SongItem) => void;
   pauseSong: () => void;
   togglePlayPause: () => void;
@@ -48,15 +40,11 @@ interface MoodifyContextType {
 }
 
 const defaultContext: MoodifyContextType = {
-  profile: null,
-  setProfile: () => {},
   songs: [],
   favourites: [],
   moods: [],
   selectedMood: 'All',
   thumbnailSongs: [],
-  accessToken: null,
-  setAccessToken: () => {},
   currentSong: null,
   isPlaying: false,
   volume: 1,
@@ -65,8 +53,6 @@ const defaultContext: MoodifyContextType = {
   addToFavorites: () => {},
   removeFromFavorites: () => {},
   setSelectedMood: () => {},
-  logout: () => {},
-  login: () => {},
   playSong: () => {},
   pauseSong: () => {},
   togglePlayPause: () => {},
@@ -88,7 +74,6 @@ interface MoodifyProviderProps {
 }
 
 export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [songs] = useState(songData as SongItem[]);
   const [favourites, setFavourites] = useState<SongItem[]>(() => {
     const storedFavs = localStorage.getItem('favSongs');
@@ -102,9 +87,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   const [moods] = useState(Moods);
   const [selectedMood, setSelectedMood] = useState<Categories>('All');
   const [thumbnailSongs, setThumbnailSongs] = useState<SongItem[]>([]);
-  const [accessToken, setAccessToken] = useState<string | null>(
-    localStorage.getItem('access_token')
-  );
+
   const [currentSong, setCurrentSong] = useState<SongItem | null>(null);
 
   const [notification, setNotification] = useState<{
@@ -121,53 +104,6 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   const audioRef = useRef<HTMLAudioElement>(new Audio()); //avoids <audio></audio>
   const navigate = useNavigate();
 
-  // Fetch profile when accessToken changes
-  useEffect(() => {
-    const fetchAndSetProfile = async () => {
-      const token = localStorage.getItem('access_token');
-      if (token && !profile) {
-        console.log('Fetching profile with token:', token);
-
-        // Only fetch if we don’t already have a profile
-        try {
-          setAccessToken(token);
-          const profileData = await fetchProfile(token);
-          console.log('Profile set:', profileData);
-          setProfile(profileData);
-          navigate('/');
-        } catch (error) {
-          console.error('Error fetching profile:', error);
-          setAccessToken(null);
-          localStorage.removeItem('access_token');
-        }
-      }
-    };
-    fetchAndSetProfile();
-  }, [accessToken]);
-
-  useEffect(() => {
-    console.log('accessToken changed:', accessToken);
-  }, [accessToken]);
-
-  useEffect(() => {
-    console.log('profile changed:', profile);
-  }, [profile]);
-
-  // useEffect(() => {
-  //   const filteredSongs =
-  //     selectedMood === 'All'
-  //       ? getRandomSongs(songs, 4)
-  //       : songs.filter((song) => song.mood === selectedMood).slice(0, 4);
-  //   setThumbnailSongs(filteredSongs);
-
-  //   if (filteredSongs.length > 0 && !currentSong) {
-  //     setCurrentSong(filteredSongs[0]);
-  //     if (audioRef.current) {
-  //       audioRef.current.src = filteredSongs[0].audioUrl; //Preload audio
-  //       audioRef.current.volume = volume;
-  //     }
-  //   }
-  // }, [selectedMood, songs]);
   useEffect(() => {
     const filteredSongs =
       selectedMood === 'All'
@@ -352,25 +288,6 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     }
   };
 
-  // const togglePlayPause = () => {
-  //   if (audioRef.current && currentSong) {
-  //     if (isPlaying) {
-  //       pauseSong();
-  //     } else {
-  //       audioRef.current.src = currentSong.audioUrl;
-  //       audioRef.current.volume = volume;
-  //       //continue authematically play for next song onclick
-  //       //audioRef.current.currentTime = audioRef.current.duration - currentTime; // Resume from spot
-  //       audioRef.current
-  //         .play()
-  //         .then(() => setIsPlaying(true))
-  //         .catch((error) => console.error('Error', error));
-  //       setIsPlaying(true);
-  //       setCurrentTime(parseDurationToSeconds(currentSong.duration));
-  //     }
-  //   }
-  // };
-
   const setVolume = (newVolume: number) => {
     setVolumeState(newVolume);
     if (audioRef.current) {
@@ -378,29 +295,14 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('code_verifier');
-    setAccessToken(null);
-    setProfile(null);
-    navigate('/');
-  };
-
-  const login = () => {
-    initiateLogin();
-  };
-
   return (
     <MoodifyContext.Provider
       value={{
-        profile,
-        setProfile,
         songs,
         favourites,
         moods,
         selectedMood,
         thumbnailSongs,
-        accessToken,
         currentSong,
         isPlaying,
         volume,
@@ -409,8 +311,6 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         addToFavorites,
         removeFromFavorites,
         setSelectedMood,
-        logout,
-        login,
         playSong,
         pauseSong,
         togglePlayPause,

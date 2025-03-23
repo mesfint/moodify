@@ -104,6 +104,7 @@ const CurrentSong = () => {
             variant="default"
             size="icon"
             onClick={handlePrev}
+            className={`border  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
             disabled={!currentSong || thumbnailSongs.length === 0}
           >
             <ChevronLeft />
@@ -112,6 +113,7 @@ const CurrentSong = () => {
             variant="default"
             size="icon"
             onClick={togglePlayPause}
+            className={`border ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
             disabled={!currentSong}
           >
             {isPlaying ? <Pause /> : <Play />}
@@ -120,6 +122,7 @@ const CurrentSong = () => {
             variant="default"
             size="icon"
             onClick={handleNext}
+            className={`border  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
             disabled={!currentSong || thumbnailSongs.length === 0}
           >
             <ChevronRight />
@@ -136,6 +139,7 @@ const CurrentSong = () => {
             size="icon"
             onClick={handleVolume}
             tooltip={volume ? 'Mute' : 'Unmute'}
+            className={`border ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
             disabled={!currentSong}
           >
             {volume ? <Volume2 /> : <VolumeOff />}

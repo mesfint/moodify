@@ -1,10 +1,12 @@
 // Footer.tsx
 import { Book, Github, Link2, Linkedin } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMoodify } from '../hooks/useMoodify';
+import { Button } from './Button';
 
 const Footer = () => {
-  const { theme } = useMoodify(); // Assuming theme comes from useMoodify
+  const { theme } = useMoodify();
+  const navigate = useNavigate();
 
   return (
     <footer
@@ -73,33 +75,57 @@ const Footer = () => {
                 href="https://github.com/mesfint/moodify"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full hover:bg-secondary-text-dim transition-colors"
               >
-                <Link2 size={20} />
+                <Button
+                  variant="default"
+                  size="icon"
+                  className={`border cursor-pointer  rounded-full  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-seconda text-secondary-text-dim'}`}
+                >
+                  <Link2 size={20} />
+                </Button>
               </a>
+
               <a
-                href="https://github.com/mesfint/moodify"
+                href="https://github.com/mesfint"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full hover:bg-secondary-text-dim transition-colors"
+                className=" rounded-full hover:bg-secondary-text-dim transition-colors"
               >
-                <Github size={20} />
+                <Button
+                  variant="default"
+                  size="icon"
+                  className={`border cursor-pointer  rounded-full  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-seconda text-secondary-text-dim'}`}
+                >
+                  <Github size={20} />
+                </Button>
               </a>
               <a
                 href="https://www.linkedin.com/in/mesfin/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full hover:bg-secondary-text-dim transition-colors"
+                className=" rounded-full hover:bg-secondary-text-dim transition-colors"
               >
-                <Linkedin size={20} />
+                <Button
+                  variant="default"
+                  size="icon"
+                  className={`border cursor-pointer  rounded-full  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-seconda text-secondary-text-dim'}`}
+                >
+                  <Linkedin size={20} />
+                </Button>
               </a>
               <a
                 href="https://dev.to/mesfin_t"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full hover:bg-secondary-text-dim transition-colors"
+                className=" rounded-full hover:bg-secondary-text-dim transition-colors"
               >
-                <Book size={20} />
+                <Button
+                  variant="default"
+                  size="icon"
+                  className={`border cursor-pointer  rounded-full  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-seconda text-secondary-text-dim'}`}
+                >
+                  <Book size={20} />
+                </Button>
               </a>
             </div>
           </div>
@@ -139,7 +165,15 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-neutral-200 dark:border-neutral-700 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm opacity-75">
-            &copy; {new Date().getFullYear()} Moodify. All rights reserved.
+            &copy; {new Date().getFullYear()} Moodify. Developed by{' '}
+            <span>
+              <Link
+                to="https://www.linkedin.com/in/mesfin/"
+                className="text-sm underline hover:underline hover:opacity-80 transition-opacity"
+              >
+                Mesfin.
+              </Link>
+            </span>
           </p>
         </div>
       </div>

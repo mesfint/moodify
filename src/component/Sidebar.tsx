@@ -31,7 +31,7 @@ const Sidebar = () => {
 
       {/* Large Screen Sidebar */}
       <aside
-        className={`hidden lg:flex fixed top-26 bottom-0 w-56 flex-col gap-2 px-2 overflow-y-auto scrollbar-hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
+        className={`hidden lg:flex fixed top-26 bottom-0 w-56  flex-col gap-2 px-2 overflow-y-auto scrollbar-hidden ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
       >
         <nav role="navigation" className="flex flex-col gap-2">
           <NavLink
@@ -65,7 +65,7 @@ const Sidebar = () => {
                   <NavLink
                     key={playlist.id}
                     to={`/playlists/${playlist.id}`}
-                    className={`block py-2 px-4 text-sm ${theme === 'dark' ? 'hover:bg-secondary-text-dim text-secondary-text-light' : 'hover:bg-secondary-text-light text-secondary-text-dim'}`}
+                    className={`block py-2 px-4 rounded-lg text-sm ${theme === 'dark' ? 'hover:bg-secondary-text-dim text-secondary-text-light' : 'hover:bg-secondary-text-light text-secondary-text-dim'}`}
                   >
                     {playlist.name}
                   </NavLink>
@@ -76,7 +76,9 @@ const Sidebar = () => {
             </div>
           </div>
         </nav>
-        <div className="flex-1 bg-secondary-dark"></div>
+        <div
+          className={`flex-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : 'bg-white text-secondary-text-dim'}`}
+        ></div>
       </aside>
     </>
   );

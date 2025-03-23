@@ -18,6 +18,7 @@ const Playlists = () => {
     currentSong,
     playSong,
     pauseSong,
+    notification,
   } = useMoodify();
   const [playlistName, setPlaylistName] = useState('');
   const { playlistId } = useParams();
@@ -53,7 +54,7 @@ const Playlists = () => {
   if (playlistId && selectedPlaylist) {
     return (
       <div className="flex flex-col">
-        <h2 className="mx-5 py-2">{selectedPlaylist.name}</h2>
+        <h2 className="mx-10 py-2">{selectedPlaylist.name}</h2>
         <table className="w-full">
           <thead>
             <tr>
@@ -63,17 +64,18 @@ const Playlists = () => {
               <th className="px-2">Duration</th> */}
             </tr>
           </thead>
-          <tbody className=" ">
+          <tbody>
             {selectedPlaylist.songs.length > 0 ? (
               selectedPlaylist.songs.map((song, index: number) => (
                 <tr
-                  className={
+                  className={`
+                  ${
                     currentSong?.id === song.id && isPlaying
-                      ? 'bg-secondary-text-dim'
+                      ? 'bg-secondary-text-dim '
                       : theme === 'dark'
-                        ? 'text-secondary-text-light'
+                        ? ' text-neutral-100 '
                         : 'text-secondary-text-dim'
-                  }
+                  }`}
                 >
                   <div className="flex gap-2 mb-2">
                     <td className="text-md text-center mx-2">{index + 1}</td>
@@ -83,8 +85,16 @@ const Playlists = () => {
                         src={song.thumbnailUrl}
                       />
                       <span className="flex  flex-col ">
-                        <span className="font-bold">{song.title}</span>
-                        <span className="text-sm">{song.artist}</span>
+                        <span
+                          className={` text-wrap ${theme === 'dark' && currentSong?.id === song.id && isPlaying ? 'text-secondary-text-light' : 'text-neutral-400'} `}
+                        >
+                          {song.title}
+                        </span>
+                        <span
+                          className={` text-wrap ${theme === 'dark' && currentSong?.id === song.id && isPlaying ? 'text-secondary-text-light' : 'text-neutral-400'} `}
+                        >
+                          {song.artist}
+                        </span>
                       </span>
                     </td>
                   </div>
@@ -93,7 +103,7 @@ const Playlists = () => {
                       variant="default"
                       size="icon"
                       onClick={() => handleTogglePlay(song)}
-                      className={`bg-white border-1 mb-2 cursor-pointer ${
+                      className={`bg-white border-1  cursor-pointer ${
                         theme === 'dark'
                           ? 'bg-secondary-text-dim'
                           : 'text-secondary-text-dim'
@@ -111,7 +121,7 @@ const Playlists = () => {
                     <Button
                       variant="default"
                       size="icon"
-                      className={` cursor-pointer border-1  ${
+                      className={` cursor-pointer border-1   ${
                         theme === 'dark'
                           ? 'hover:bg-secondary-text-dim  text-secondary-text-light'
                           : 'bg-white hover:bg-secondary-text-light text-secondary-text-dim'
@@ -180,7 +190,7 @@ const Playlists = () => {
                 style={{ backgroundColor: playlist.bgColor || '#6B7280' }}
                 to={`/playlists/${playlist.id}`}
               >
-                <span className="font-bold">{playlist.name}</span>
+                <span className="font-bold ">{playlist.name}</span>
                 <p>
                   ({playlist.songs.length})
                   {playlist.songs.length > 1 ? ' songs ' : ' song '}

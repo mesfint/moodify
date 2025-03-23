@@ -115,7 +115,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             variant="default"
             size="icon"
             onClick={handlePrev}
-            className={`  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={`border cursor-pointer  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             <ChevronLeft />
           </Button>
@@ -123,7 +123,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             variant="default"
             size="icon"
             onClick={togglePlayPause}
-            className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={`border cursor-pointer ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             {isPlaying ? <Pause /> : <Play />}
           </Button>
@@ -131,7 +131,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             variant="default"
             size="icon"
             onClick={handleNext}
-            className={`  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={`border cursor-pointer ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             <ChevronRight />
           </Button>
@@ -149,7 +149,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             size="icon"
             onClick={handleVolume}
             tooltip={volume ? 'Mute' : 'Unmute'}
-            className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={`border cursor-pointer ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             {volume ? <Volume2 /> : <VolumeOff />}
           </Button>
@@ -159,17 +159,10 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
             onClick={() => currentSong && onAddFavourite(currentSong)}
             tooltip="Add to Favorites"
             disabled={!currentSong}
-            className={` ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+            className={`border cursor-pointer ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
           >
             <Heart />
           </Button>
-          {/* <Button
-            variant="default"
-            size="icon"
-            className={`border-1 ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'} `}
-          >
-            <EllipsisVertical />
-          </Button> */}
         </div>
       </div>
       {/* Song Card */}
@@ -181,7 +174,7 @@ const NewReleases = ({ songs, onAddFavourite }: NewRelasesProps) => {
           >
             <div className="relative">
               <Button
-                className={`absolute bg-transparent top-2  right-2  flex items-center justify-center border-1 ${theme === 'dark' ? 'border-white ' : ' border-black '} rounded-full md:w-12 md:h-12 w-8 h-8  cursor-pointer`}
+                className={`absolute bg-transparent top-2  right-2  flex items-center justify-center border-1 ${theme === 'dark' ? 'border-white ' : ' border-black '} rounded-full md:w-10 md:h-10 w-8 h-8  cursor-pointer`}
                 onClick={() =>
                   setExpandedSongId(expandedSongId === song.id ? null : song.id)
                 }

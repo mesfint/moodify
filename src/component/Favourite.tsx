@@ -63,7 +63,7 @@ const Favourite = () => {
     <div className="flex flex-col gap-4 mx-4">
       {/* Search Form */}
       <div className="flex justify-end mb-2">
-        <form className="relative w-full md:w-64">
+        <form className="relative w-full md:w-64 py-2">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary-text-light" />
           <input
             type="text"
@@ -75,7 +75,7 @@ const Favourite = () => {
         </form>
       </div>
 
-      <table className="w-full text-left table-fixed">
+      <table className="w-full text-left table-fixed ">
         <thead>
           <tr
             className={
@@ -85,8 +85,8 @@ const Favourite = () => {
             }
           >
             {' '}
-            <th className="px-2 hidden md:table-cell">Song</th>
-            <th className="px-2">
+            <th className="px-8 hidden md:table-cell">Song</th>
+            <th className="px-8">
               <Button
                 variant="default"
                 size="icon"
@@ -96,7 +96,7 @@ const Favourite = () => {
                   theme === 'dark'
                     ? 'bg-secondary-text-dim text-secondary-text-light'
                     : ' bg-white text-secondary-text-dim'
-                } // Theme on Button
+                }
               >
                 {sortDirection === 'asc' ? <MoveUp /> : <MoveDown />}
               </Button>
@@ -112,7 +112,7 @@ const Favourite = () => {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="">
           <tr>
             <td colSpan={6}>
               <hr className="my-4 border-0 dark:bg-neutral-800" />
@@ -122,28 +122,37 @@ const Favourite = () => {
             sortedFavourites.map((fav) => (
               <tr
                 key={fav.id}
-                className={
-                  currentSong?.id === fav.id && isPlaying
-                    ? 'bg-secondary-text-dim'
-                    : theme === 'dark'
-                      ? 'text-secondary-text-light'
-                      : 'text-secondary-text-dim'
-                }
+                className={`
+                 ${
+                   currentSong?.id === fav.id && isPlaying
+                     ? 'bg-secondary-text-dim '
+                     : theme === 'dark'
+                       ? ' text-neutral-100 '
+                       : 'text-secondary-text-dim'
+                 }`}
               >
-                <td className="hidden md:table-cell">
+                <td className=" hidden md:table-cell">
                   <img
-                    className="w-8 h-8 rounded-md mr-2"
+                    className="w-10 h-10 rounded-md mx-8 mb-4"
                     src={fav.thumbnailUrl}
                   />
                 </td>
-                <td className="text-wrap">{fav.artist}</td>
-                <td>{fav.title}</td>
+                <td
+                  className={` text-wrap ${theme === 'dark' && currentSong?.id === fav.id && isPlaying ? 'text-secondary-text-light' : 'text-neutral-400'} `}
+                >
+                  {fav.artist}
+                </td>
+                <td
+                  className={`${theme === 'dark' && currentSong?.id === fav.id && isPlaying ? 'text-secondary-text-light' : 'text-neutral-400'} `}
+                >
+                  {fav.title}
+                </td>
                 <td>
                   <Button
                     variant="default"
                     size="icon"
                     onClick={() => handleTogglePlay(fav)}
-                    className={`bg-white border-1 mb-2 cursor-pointer ${
+                    className={`bg-white border-1 mr-4 cursor-pointer ${
                       theme === 'dark'
                         ? 'bg-secondary-text-dim'
                         : 'text-secondary-text-dim'
