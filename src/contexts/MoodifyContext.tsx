@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect, useRef, useState } from 'react';
 import { Moods, songData } from '../data/songs';
 import { Categories, SongItem } from '../types/moodify';
 import { parseDurationToSeconds } from '../utils/convertToMMSS';
-import { getRandomBGcolors, getRandomSongs } from '../utils/random';
+import { getRandomBGcolors } from '../utils/random';
 
 interface Playlist {
   id: string;
@@ -15,16 +15,17 @@ interface MoodifyContextType {
   songs: SongItem[];
   favourites: SongItem[];
   moods: Categories[];
-  selectedMood: Categories;
+  mood: Categories;
+  setMood: (mood: Categories) => void;
   thumbnailSongs: SongItem[];
   currentSong: SongItem | null;
   isPlaying: boolean;
   volume: number;
   currentTime: number;
+  notify: (message: string) => void;
   notification: { message: string; visible: boolean };
   addToFavorites: (song: SongItem) => void;
   removeFromFavorites: (id: number) => void;
-  setSelectedMood: (mood: Categories) => void;
   playSong: (song: SongItem) => void;
   pauseSong: () => void;
   togglePlayPause: () => void;
@@ -42,16 +43,17 @@ const defaultContext: MoodifyContextType = {
   songs: [],
   favourites: [],
   moods: [],
-  selectedMood: 'All',
+  mood: 'All',
+  setMood: () => {},
   thumbnailSongs: [],
   currentSong: null,
   isPlaying: false,
   volume: 1,
   currentTime: 0,
+  notify: () => {},
   notification: { message: '', visible: false },
   addToFavorites: () => {},
   removeFromFavorites: () => {},
-  setSelectedMood: () => {},
   playSong: () => {},
   pauseSong: () => {},
   togglePlayPause: () => {},
@@ -84,7 +86,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
   });
 
   const [moods] = useState(Moods);
-  const [selectedMood, setSelectedMood] = useState<Categories>('All');
+  const [mood, setMood] = useState<Categories>('All');
   const [thumbnailSongs, setThumbnailSongs] = useState<SongItem[]>([]);
 
   const [currentSong, setCurrentSong] = useState<SongItem | null>(null);
@@ -104,10 +106,11 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
 
   useEffect(() => {
     const filteredSongs =
-      selectedMood === 'All'
-        ? getRandomSongs(songs, 4)
-        : songs.filter((song) => song.mood === selectedMood).slice(0, 4);
+      mood === 'All'
+        ? songs
+        : songs.filter((song) => song.mood === mood).slice(0, 4);
     setThumbnailSongs(filteredSongs);
+    // notify('Invalid category, defaulting to All');
     if (filteredSongs.length > 0 && !currentSong) {
       setCurrentSong(filteredSongs[0]);
       setCurrentTime(parseDurationToSeconds(filteredSongs[0].duration)); // Preload time
@@ -126,7 +129,7 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
           });
       }
     }
-  }, [selectedMood, songs]);
+  }, [mood, songs, currentSong, volume]);
 
   //Time Countdown & song completion Effect
   useEffect(() => {
@@ -327,16 +330,17 @@ export const MoodifyProvider = ({ children }: MoodifyProviderProps) => {
         songs,
         favourites,
         moods,
-        selectedMood,
+        mood,
         thumbnailSongs,
         currentSong,
         isPlaying,
         volume,
         currentTime,
+        notify,
         notification,
         addToFavorites,
         removeFromFavorites,
-        setSelectedMood,
+        setMood,
         playSong,
         pauseSong,
         togglePlayPause,

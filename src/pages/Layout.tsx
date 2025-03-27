@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Footer from '../component/Footer';
 import Header from '../component/Header';
-import MoodCategories from '../component/MoodCategories'; // Import it here
 import Sidebar from '../component/Sidebar';
 import { useMoodify } from '../hooks/useMoodify';
 
@@ -12,7 +11,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { theme, moods, setSelectedMood } = useMoodify();
+  const { theme } = useMoodify();
   const location = useLocation();
 
   const getHeaderContent = () => {
@@ -54,7 +53,7 @@ const Layout = ({ children }: LayoutProps) => {
           {/* Categories: Only render div on home route */}
           {location.pathname === '/' && (
             <div className="  fixed top-20  z-30  ">
-              <MoodCategories moods={moods} onMoodSelect={setSelectedMood} />
+              {/* <MoodCategories moods={moods} onMoodSelect={setSelectedMood} /> */}
             </div>
           )}
           <div className=" flex-1">

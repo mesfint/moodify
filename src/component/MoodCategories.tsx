@@ -4,11 +4,16 @@ import { Button } from './Button';
 
 interface CategoriesProps {
   moods: Categories[];
+  currentMood: Categories;
   onMoodSelect: (mood: Categories) => void;
 }
 
-const MoodCategories = ({ moods, onMoodSelect }: CategoriesProps) => {
-  const { selectedMood, theme } = useMoodify();
+const MoodCategories = ({
+  moods,
+  currentMood,
+  onMoodSelect,
+}: CategoriesProps) => {
+  const { theme } = useMoodify();
 
   return (
     <div className="flex gap-2 md:px-4   ">
@@ -17,7 +22,15 @@ const MoodCategories = ({ moods, onMoodSelect }: CategoriesProps) => {
           variant="default"
           key={index}
           onClick={() => onMoodSelect(mood)}
-          className={`  border-1 rounded-full shadow-md cursor-pointer sm:text-l  ${selectedMood === mood ? 'bg-secondary-neutral-950 text-white underline' : 'bg-neutral-800'}  ${theme === 'dark' ? 'bg-secondary-dark text-secondary-text-light' : ' bg-white text-secondary-text-dim'}`}
+          className={`  border-1 rounded-full shadow-md cursor-pointer sm:text-l  ${
+            currentMood === mood
+              ? 'bg-secondary-neutral-950 text-white underline'
+              : 'bg-neutral-800'
+          }  ${
+            theme === 'dark'
+              ? 'bg-secondary-dark text-secondary-text-light'
+              : ' bg-white text-secondary-text-dim'
+          }`}
         >
           {mood}
         </Button>

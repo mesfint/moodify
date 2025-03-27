@@ -1,6 +1,3 @@
-// export interface Categories {
-//   categories: 'All' | 'Sad' | 'Inspirational' | 'Happy' | 'Dramatic';
-// }
 export type Categories =
   | 'All'
   | 'Sad'
